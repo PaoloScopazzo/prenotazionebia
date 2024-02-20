@@ -82,8 +82,14 @@ function loadScheduleTable() {
         days.forEach(() => {
             const timeSlotCell = document.createElement('td');
             timeSlotCell.contentEditable = true; // Imposta la cella come editabile
+            timeSlotCell.addEventListener('input', function() {
+                if (this.textContent.trim() === '') {
+                    this.style.backgroundColor = '#8fbc8f'; // Imposta lo sfondo verde se la cella è vuota
+                } else {
+                    this.style.backgroundColor = '#db7093'; // Altrimenti, imposta lo sfondo rosso
+                }
+            });
             // Puoi aggiungere ulteriori personalizzazioni qui, ad esempio input per gli appuntamenti
-            timeSlotCell.classList.add('table'); // Aggiunge la classe 'editable-cell' per gli stili
             row.appendChild(timeSlotCell);
         });
         table.appendChild(row);
