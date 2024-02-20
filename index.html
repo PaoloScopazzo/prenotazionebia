@@ -68,7 +68,9 @@ function handleKeyboardNavigation(event) {
         const ora = getCellData(currentRowIndex,0); // Ottieni la cella specifica
         
         console.log('Dati:',cell,giorno,ora);
-        saveDataToDatabase(giorno, ora, cell);
+        if (nome !== '') {
+            saveDataToDatabase(giorno, ora, cell);
+        }
         let nextCell;
         
         switch (event.key) {
