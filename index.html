@@ -43,19 +43,10 @@
         .non-empty {
             background-color: #db7093; /* Colora il contenuto non vuoto */
         }
-        .empty{
+        .emptyORI{
             background-color: #8fbc8f; /* Colora il contenuto vuoto */
         }
-        .highlighted {
-            background-color: lightblue;
-        }
-        /* Aggiunge stili per l'evidenziazione della riga */
-        .highlighted-row td {
-            background-color: lightblue;
-        }
-        
-        /* Aggiunge stili per l'evidenziazione della colonna */
-        .highlighted-column {
+        .highlighted-cell {
             background-color: lightblue;
         }
     </style>
@@ -63,7 +54,7 @@
 <body>
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
-    <h2>Prenotazione BIA 20</h2>
+    <h2>Prenotazione BIA 21</h2>
     <table id="schedule">
         <!-- Qui verrà generata la tabella degli orari e dei giorni -->
     </table>
@@ -71,28 +62,34 @@
         <!-- Qui verranno inseriti i dati del foglio di calcolo -->
     </table>
     <script>
-        
-// Funzione per evidenziare la riga e la colonna della cella che si sta modificando
-function highlightRowAndColumn(cell) {
+      // Funzione per evidenziare la cella corrispondente nella riga e nella colonna della cella selezionata
+function highlightCorrespondingCell(cell) {
     // Rimuove eventuali evidenziazioni precedenti
     const table = document.getElementById('schedule');
-    table.querySelectorAll('.highlighted-row').forEach(element => {
-        element.classList.remove('highlighted-row');
-    });
-    table.querySelectorAll('.highlighted-column').forEach(element => {
-        element.classList.remove('highlighted-column');
+    table.querySelectorAll('.highlighted-cell').forEach(element => {
+        element.classList.remove('highlighted-cell');
     });
 
-    // Evidenzia la riga
+    // Evidenzia la cella corrispondente nella riga
     const row = cell.parentElement;
-    row.classList.add('highlighted-row');
+    row.querySelectorAll('td').forEach(element => {
+        element.classList.add('highlighted-cell');
+    });
 
-    // Evidenzia la colonna
+    // Evidenzia la cella corrispondente nella colonna
     const columnIndex = cell.cellIndex;
-    table.querySelectorAll(`tr td:nth-child(${columnIndex + 1})`).forEach(element => {
-        element.classList.add('highlighted-column');
+    table.querySelectorAll(`tr:nth-child(${row.rowIndex + 1}) td:nth-child(${columnIndex + 1})`).forEach(element => {
+        element.classList.add('highlighted-cell');
     });
 }
+
+// Aggiungi un gestore eventi al click sulle celle della tabella
+const cells = document.querySelectorAll('#schedule td');
+cells.forEach(cell => {
+    cell.addEventListener('click', function() {
+        highlightCorrespondingCell(this);
+    });
+});
 
 
 // Aggiungi un gestore eventi per l'input alle celle della tabella
