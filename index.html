@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizzatore e Aggiornatore Foglio di Calcolo</title>
+</head>
+<body>
+    <h1>Dati del Foglio di Calcolo</h1>
+    <table id="spreadsheet-data">
+        <!-- Qui verranno inseriti i dati del foglio di calcolo -->
+    </table>
+    <button onclick="updateSpreadsheet()">Aggiorna Foglio di Calcolo</button>
+
+    <script>
+        // ID del foglio di calcolo condiviso
+        const SPREADSHEET_ID = '1f0LTsDeHUTE-pVmqgYqpwFVc1AFk94_0yGDKF4wnHsE';
+        // ID della tabella nel foglio di calcolo (di solito 0)
+        const SHEET_ID = 0;
+
+        // Funzione per caricare i dati del foglio di calcolo
+        function loadSpreadsheetData() {
+            gapi.client.sheets.spreadsheets.values.get({
+                spreadsheetId: SPREADSHEET_ID,
+                range: 'FEBBRAIO' // Cambia "Sheet1" con il nome del tuo foglio di lavoro se è diverso
+            }).then(response => {
+                const values = response.result.values;
+                const table = document.getElementById('spreadsheet-data');
+                table.innerHTML = '';
+
+                if (values && values.length > 0) {
+                    values.forEach(row => {
+                        const tr = document.createElement('tr');
+                        row.forEach(cell => {
+                            const td = document.createElement('td');
+                            td.textContent = cell;
+                            tr.appendChild(td);
+                        });
+                        table.appendChild(tr);
+                    });
+                } else {
+                    console.log('Nessun dato trovato.');
+                }
+            }, error => {
+                console.error(`Errore nel caricamento dei dati del foglio di calcolo: ${error}`);
+            });
+        }
+
+        // Funzione per aggiornare i dati del foglio di calcolo
+        function updateSpreadsheet() {
+            const newData = [
+                // Inserisci qui i nuovi dati per aggiornare il foglio di calcolo
+                ['Nuovo', 'Dato', '1'],
+                ['Nuovo', 'Dato', '2']
+            ];
+
+            gapi.client.sheets.spreadsheets.values.update({
+                spreadsheetId: SPREADSHEET_ID,
+                range: 'FEBBRAIO', // Cambia "Sheet1" con il nome del tuo foglio di lavoro se è diverso
+                valueInputOption: 'RAW',
+                resource: { values: newData }
+            }).then(response => {
+                console.log('Dati aggiornati con successo.');
+                loadSpreadsheetData(); // Ricarica i dati dopo l'aggiornamento
+            }, error => {
+                console.error(`Errore nell'aggiornamento del foglio di calcolo: ${error}`);
+            });
+        }
+
+        // Inizializzazione dell'API di Google Sheets
+        function initClient() {
+            gapi.client.init({
+                apiKey: 'LA_TUA_API_KEY',
+                discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest'],
+            }).then(() => {
+                loadSpreadsheetData(); // Carica i dati del foglio di calcolo all'inizializzazione
+            }, error => {
+                console.error(`Errore nell'inizializzazione del client Google Sheets API: ${error}`);
+            });
+        }
+
+        // Carica il client dell'API di Google Sheets
+        gapi.load('client', initClient);
+    </script>
+
+    <!-- Carica l'API di Google -->
+    <script src="https://apis.google.com/js/api.js"></script>
+</body>
+</html>
