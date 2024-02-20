@@ -243,8 +243,10 @@ function loadTableDataFromLocalStorage() {
             rowData.forEach((cellData, cellIndex) => {
                 // Se la cella non è nell'intestazione, verifica se corrisponde al giorno e all'ora
                 if (rowIndex > 0 && cellIndex > 0) {
-                    const giornoCell = table.rows[0]?.cells[cellIndex];
-                    const giorno = giornoCell ? giornoCell.textContent : '';
+                    const headerRow = table.rows[0]; // Ottieni la riga dell'intestazione
+                    const giornoCell = headerRow ? headerRow.cells[cellIndex] : null; // Verifica se la riga dell'intestazione esiste
+                    const giorno = giornoCell ? giornoCell.textContent : ''; // Verifica se la cella del giorno esiste e accedi al suo contenuto
+
                     const ora = table.rows[rowIndex].cells[0].textContent;
                     if (giorno === rowData[0] && ora === tableData[0][cellIndex]) {
                         const cell = row.insertCell();
