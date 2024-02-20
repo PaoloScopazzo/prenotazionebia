@@ -49,7 +49,7 @@
 <body>
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
-    <h2>Prenotazione BIA 49</h2>
+    <h2>Prenotazione BIA 50</h2>
         <table id="schedule">
             <!-- Qui verranno visualizzati i giorni -->
         </table>
@@ -180,7 +180,6 @@ loadScheduleTable();
 
 function saveDataToDatabase(giorno, ora, nome) {
     const data = { giorno: giorno, ora: ora, nome: nome };
-    console.log('Dati: ',data);
     
     // Apri il database o crea uno nuovo se non esiste
     const request = window.indexedDB.open('scheduleDatabase', 1);
@@ -189,8 +188,8 @@ function saveDataToDatabase(giorno, ora, nome) {
     request.onupgradeneeded = function(event) {
         const db = event.target.result;
         if (!db.objectStoreNames.contains('scheduleData')) {
-            const objectStore = db.createObjectStore('scheduleData', { autoIncrement: true });
-            // Aggiungi eventuali indicizzazioni o altre configurazioni qui
+            const objectStore = db.createObjectStore('scheduleData', { keyPath: ['giorno', 'ora'] });
+            // Specifica giorno e ora come chiavi primarie
         }
     };
     
