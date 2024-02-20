@@ -49,73 +49,13 @@
 <body>
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
-    <h2>Prenotazione BIA 35</h2>
+    <h2>Prenotazione BIA 34</h2>
         <button id="saveButton">Salva</button>
         <table id="schedule">
             <!-- Qui verranno visualizzati i giorni -->
         </table>
     <script>
-
-function saveDataToSQLite() {
-        // Ottieni tutti i dati dalla tabella
-        const table = document.getElementById('schedule');
-        const rows = table.rows;
-
-        // Inizializza una transazione SQLite
-        const transaction = db.transaction(['scheduleData'], 'readwrite');
-        const objectStore = transaction.objectStore('scheduleData');
-
-        // Cicla su ogni riga della tabella (escludendo la prima riga con le intestazioni)
-        for (let i = 1; i < rows.length; i++) {
-            const row = rows[i];
-            const cells = row.cells;
-
-            // Ottieni il giorno dalla prima riga della tabella
-            const day = rows[0].cells[i].textContent.trim();
-
-            // Cicla su ogni cella della riga (escludendo la prima cella con l'orario)
-            for (let j = 1; j < cells.length; j++) {
-                const cell = cells[j];
-
-                // Ottieni l'ora dalla prima colonna della tabella
-                const time = cells[0].textContent.trim();
-
-                // Ottieni il nominativo dalla cella corrente
-                const nominativo = cell.dataset.nominativo;
-
-                // Ottieni il testo dalla cella
-                const cellText = cell.textContent.trim();
-
-                // Crea un oggetto per memorizzare i dati
-                const data = {
-                    day: day,
-                    time: time,
-                    nominativo: nominativo,
-                    value: cellText
-                };
-
-                // Aggiungi l'oggetto all'object store SQLite
-                const request = objectStore.add(data);
-
-                // Gestisci gli errori in caso di problemi con l'aggiunta dei dati
-                request.onerror = function(event) {
-                    console.error('Errore durante il salvataggio dei dati:', event.target.error);
-                };
-
-                // Logga un messaggio di successo quando i dati vengono aggiunti correttamente
-                request.onsuccess = function(event) {
-                    console.log('Dati salvati con successo:', event.target.result);
-                };
-            }
-        }
-
-        // Completamento della transazione
-        transaction.oncomplete = function() {
-            console.log('Transazione completata');
-        };
-    }
-
-    
+        
     // Funzione per salvare i dati della tabella in SQLite
 function saveDataToSQLite() {
     // Ottieni tutti i dati dalla tabella
@@ -204,62 +144,59 @@ function handleKeyboardNavigation(event) {
 
 // Aggiungi un gestore eventi per il keydown
 document.addEventListener('keydown', handleKeyboardNavigation);
+
 // Funzione per caricare la tabella degli orari e dei giorni
-    function loadScheduleTable() {
-        const table = document.getElementById('schedule');
-        table.innerHTML = ''; // Pulisce la tabella
+function loadScheduleTable() {
+    const table = document.getElementById('schedule');
+    table.innerHTML = ''; // Pulisce la tabella
 
-        // Ottieni la data corrente
-        const currentDate = new Date();
+    // Ottieni la data corrente
+    const currentDate = new Date();
+    
+    // Calcola la data di inizio e fine per il range di due mesi
+    const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 3, 0);
 
-        // Calcola la data di inizio e fine per il range di due mesi
-        const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-        const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 3, 0);
+    const days = getDaysInRange(startDate, endDate); // Ottieni i giorni da febbraio ad aprile
+    const times = generateTimeSlots(); // Genera gli slot di tempo da 09:00 a 20:15 a intervalli di 15 minuti
 
-        const days = getDaysInRange(startDate, endDate); // Ottieni i giorni da febbraio ad aprile
-        const times = generateTimeSlots(); // Genera gli slot di tempo da 09:00 a 20:15 a intervalli di 15 minuti
+    // Crea l'intestazione delle colonne con i giorni
+    const headerRow = document.createElement('tr');
+    const emptyHeaderCell = document.createElement('th');
+    headerRow.appendChild(emptyHeaderCell); // Cella vuota per l'angolo in alto a sinistra
+    days.forEach(day => {
+        const dayCell = document.createElement('th');
+        dayCell.textContent = day.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' }); // Visualizza solo il giorno e il mese
+        headerRow.appendChild(dayCell);
+    });
+    table.appendChild(headerRow);
 
-        // Crea l'intestazione delle colonne con i giorni
-        const headerRow = document.createElement('tr');
-        const emptyHeaderCell = document.createElement('th');
-        headerRow.appendChild(emptyHeaderCell); // Cella vuota per l'angolo in alto a sinistra
-        days.forEach(day => {
-            const dayCell = document.createElement('th');
-            dayCell.textContent = day.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' }); // Visualizza solo il giorno e il mese
-            headerRow.appendChild(dayCell);
-        });
-        table.appendChild(headerRow);
-
-        // Crea le righe con gli orari
-        times.forEach(time => {
-            const row = document.createElement('tr');
-            const timeCell = document.createElement('td');
-            timeCell.textContent = time;
-            row.appendChild(timeCell); // Aggiungi l'orario nella prima colonna
-            days.forEach(day => {
-                const timeSlotCell = document.createElement('td');
-                timeSlotCell.contentEditable = true; // Imposta la cella come editabile
-                timeSlotCell.dataset.nominativo = ''; // Inizializza il dataset per il nominativo
-                timeSlotCell.addEventListener('input', function() {
-                    if (this.textContent.trim() === '') {
-                        this.style.backgroundColor = 'white'; // Imposta lo sfondo verde se la cella è vuota
-                    } else {
-                        this.style.backgroundColor = '#db7093'; // Altrimenti, imposta lo sfondo rosso
-                    }
-                });
-                // Aggiungi un evento focus per impostare il nominativo quando la cella viene selezionata
-                timeSlotCell.addEventListener('focus', function() {
-                    this.dataset.nominativo = prompt('Inserisci il nominativo:');
-                });
-                // Puoi aggiungere ulteriori personalizzazioni qui, ad esempio input per gli appuntamenti
-                row.appendChild(timeSlotCell);
+    // Crea le righe con gli orari
+    times.forEach(time => {
+        const row = document.createElement('tr');
+        const timeCell = document.createElement('td');
+        timeCell.textContent = time;
+        row.appendChild(timeCell); // Aggiungi l'orario nella prima colonna
+        days.forEach(() => {
+            const timeSlotCell = document.createElement('td');
+            timeSlotCell.contentEditable = true; // Imposta la cella come editabile
+            timeSlotCell.addEventListener('input', function() {
+                if (this.textContent.trim() === '') {
+                    this.style.backgroundColor = 'white'; // Imposta lo sfondo verde se la cella è vuota
+                } else {
+                    this.style.backgroundColor = '#db7093'; // Altrimenti, imposta lo sfondo rosso
+                }
             });
-            table.appendChild(row);
+            // Puoi aggiungere ulteriori personalizzazioni qui, ad esempio input per gli appuntamenti
+            row.appendChild(timeSlotCell);
         });
-        // Aggiungi un evento click al pulsante di salvataggio
-        const saveButton = document.getElementById('saveButton');
-        saveButton.addEventListener('click', saveDataToSQLite);
-    }
+        table.appendChild(row);
+    });
+    // Aggiungi un evento click al pulsante di salvataggio
+    const saveButton = document.getElementById('saveButton');
+    saveButton.addEventListener('click', saveDataToSQLite);
+}
+
 // Funzione per generare gli slot di tempo da 09:00 a 20:15 a intervalli di 15 minuti
 function generateTimeSlots() {
     const times = [];
