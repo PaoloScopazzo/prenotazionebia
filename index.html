@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizzatore e Aggiornatore Foglio di Calcolo</title>
-    <!-- Carica l'API di Google -->
-    <script src="https://apis.google.com/js/api.js"></script>
+    <title>Prenotazione BAI</title>
     <style>
         body {
-            background-color: white; /* Imposta il background arancione */
+            background-color: white; /* Imposta il background bianco */
             color: black; /* Imposta il colore del testo nero */
             font-family: Arial, sans-serif; /* Imposta il font del testo */
             margin: 0; /* Rimuove il margine predefinito */
@@ -30,23 +28,20 @@
             margin: 0 auto; /* Centra il logo orizzontalmente */
         }
         #table-container {
-            overflow-x: auto;
+            overflow-x: auto; /* Abilita lo scorrimento orizzontale */
+            display: flex; /* Utilizza il layout flessibile */
         }
         #time-column {
             width: 100px; /* Larghezza fissa per la colonna dell'ora */
-            flex-shrink: 0; /* Evita che la colonna dell'ora si restringa */
             background-color: #f0f0f0; /* Colore di sfondo per la colonna dell'ora */
+            flex-shrink: 0; /* Evita che la colonna dell'ora si restringa */
         }
-        
         #schedule-container {
-            overflow-x: auto; /* Abilita lo scorrimento orizzontale per la parte dei giorni */
+            overflow-x: hidden; /* Nasconde lo scorrimento orizzontale */
+            flex-grow: 1; /* Consente alla parte dei giorni di espandersi per riempire lo spazio rimanente */
         }
-        
         #schedule {
-            min-width: 600px; /* Larghezza minima per la parte dei giorni */
-        }
-        table {
-            width: 100%; /* Imposta la larghezza della tabella al 100% */
+            width: 100%; /* Imposta la larghezza della tabella dei giorni al 100% */
             border-collapse: collapse; /* Unisce i bordi delle celle */
             background-color: white; /* Imposta lo sfondo della tabella bianco */
             margin-top: 20px; /* Aggiunge spazio superiore */
@@ -79,7 +74,7 @@
 <body>
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
-    <h2>Prenotazione BIA 28</h2>
+    <h2>Prenotazione BIA 29</h2>
     <div id="table-container">
         <div id="time-column">
             <!-- Qui verranno visualizzati gli orari -->
