@@ -230,6 +230,11 @@ function loadTableDataFromLocalStorage() {
         const tableData = JSON.parse(tableDataJSON);
         const table = document.getElementById('schedule');
 
+        // Elimina le righe esistenti dalla tabella
+        while (table.rows.length > 0) {
+            table.deleteRow(0);
+        }
+
         // Itera sui dati della tabella e popola la tabella con essi
         tableData.forEach((rowData, rowIndex) => {
             const row = table.insertRow();
@@ -247,6 +252,7 @@ function loadTableDataFromLocalStorage() {
         });
     }
 }
+
 
 
         
