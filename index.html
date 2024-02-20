@@ -51,7 +51,7 @@
 <body>
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
-    <h2>Prenotazione BIA 14</h2>
+    <h2>Prenotazione BIA 15</h2>
     <table id="schedule">
         <!-- Qui verrà generata la tabella degli orari e dei giorni -->
     </table>
@@ -59,6 +59,35 @@
         <!-- Qui verranno inseriti i dati del foglio di calcolo -->
     </table>
     <script>
+        
+// Funzione per evidenziare la riga e la colonna della cella che si sta modificando
+function highlightRowAndColumn(cell) {
+    // Rimuove eventuali evidenziazioni precedenti
+    const table = document.getElementById('schedule');
+    table.querySelectorAll('.highlighted').forEach(element => {
+        element.classList.remove('highlighted');
+    });
+
+    // Evidenzia la riga
+    const row = cell.parentElement;
+    row.classList.add('highlighted');
+
+    // Evidenzia la colonna
+    const columnIndex = cell.cellIndex;
+    table.querySelectorAll(`td:nth-child(${columnIndex + 1})`).forEach(element => {
+        element.classList.add('highlighted');
+    });
+}
+
+// Aggiungi un gestore eventi per l'input alle celle della tabella
+const cells = document.querySelectorAll('#schedule td');
+cells.forEach(cell => {
+    cell.addEventListener('input', function() {
+        highlightRowAndColumn(this);
+    });
+});
+
+        
 // Funzione per gestire la navigazione tra le celle della tabella utilizzando le frecce della tastiera
 function handleKeyboardNavigation(event) {
     const table = document.getElementById('schedule');
