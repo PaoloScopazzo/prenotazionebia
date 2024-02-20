@@ -51,7 +51,7 @@
 <body>
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
-    <h2>Prenotazione BIA 13</h2>
+    <h2>Prenotazione BIA 14</h2>
     <table id="schedule">
         <!-- Qui verrà generata la tabella degli orari e dei giorni -->
     </table>
@@ -59,6 +59,41 @@
         <!-- Qui verranno inseriti i dati del foglio di calcolo -->
     </table>
     <script>
+// Funzione per gestire la navigazione tra le celle della tabella utilizzando le frecce della tastiera
+function handleKeyboardNavigation(event) {
+    const table = document.getElementById('schedule');
+    const focusedCell = document.activeElement;
+
+    if (focusedCell.tagName === 'TD') {
+        const currentRowIndex = focusedCell.parentElement.rowIndex;
+        const currentCellIndex = focusedCell.cellIndex;
+
+        let nextCell;
+        
+        switch (event.key) {
+            case 'ArrowUp':
+                nextCell = table.rows[currentRowIndex - 1]?.cells[currentCellIndex];
+                break;
+            case 'ArrowDown':
+                nextCell = table.rows[currentRowIndex + 1]?.cells[currentCellIndex];
+                break;
+            case 'ArrowLeft':
+                nextCell = focusedCell.previousElementSibling;
+                break;
+            case 'ArrowRight':
+                nextCell = focusedCell.nextElementSibling;
+                break;
+        }
+
+        if (nextCell) {
+            nextCell.focus();
+            event.preventDefault(); // Evita il comportamento predefinito della tastiera
+        }
+    }
+}
+
+// Aggiungi un gestore eventi per il keydown
+document.addEventListener('keydown', handleKeyboardNavigation);
 
 // Funzione per caricare la tabella degli orari e dei giorni
 function loadScheduleTable() {
