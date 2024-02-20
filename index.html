@@ -88,25 +88,31 @@
                 console.error(`Errore nel caricamento dei dati del foglio di calcolo: ${error}`);
             });
         }
-
-        // Funzione per aggiornare i dati del foglio di calcolo
-        function updateSpreadsheet() {
-            const newData = [
-                // Inserisci qui i nuovi dati per aggiornare il foglio di calcolo
-                ['Nuovo', 'Dato', '1'],
-                ['Nuovo', 'Dato', '2']
-            ];
-
+// Funzione per aggiornare il valore di una cella nel foglio di calcolo
+        function updateCellValue(row, column, newValue) {
             gapi.client.sheets.spreadsheets.values.update({
                 spreadsheetId: SPREADSHEET_ID,
-                range: 'FEBBRAIO', // Cambia "Sheet1" con il nome del tuo foglio di lavoro se è diverso
+                range: 'FEBBRAIO!' + String.fromCharCode(65 + column) + (row + 1), // Converti la coordinata della cella in formato A1
                 valueInputOption: 'RAW',
-                resource: { values: newData }
+                resource: { values: [[newValue]] }
             }).then(response => {
-                console.log('Dati aggiornati con successo.');
-                loadSpreadsheetData(); // Ricarica i dati dopo l'aggiornamento
+                console.log('Cella aggiornata con successo.');
             }, error => {
-                console.error(`Errore nell'aggiornamento del foglio di calcolo: ${error}`);
+                console.error('Errore nell\'aggiornamento della cella:', error.result.error.message);
+            });
+        }
+         // Funzione per aggiornare il foglio di calcolo con i valori modificati nella tabella
+        function updateSpreadsheet() {
+            const table = document.getElementById('spreadsheet-data');
+            const cells = table.querySelectorAll('td');
+
+            cells.forEach(cell => {
+                cell.addEventListener('blur', () => {
+                    const row = parseInt(cell.dataset.row);
+                    const column = parseInt(cell.dataset.column);
+                    const newValue = cell.textContent;
+                    updateCellValue(row, column, newValue);
+                });
             });
         }
 
