@@ -223,25 +223,32 @@ function saveTableDataToLocalStorage() {
 // Funzione per caricare i dati della tabella dall'LocalStorage
 function loadTableDataFromLocalStorage() {
     // Ottieni i dati della tabella dall'LocalStorage
-    console.log(6);
     const tableDataJSON = localStorage.getItem('tableData');
-    console.log(7);
+    
     // Se i dati sono presenti nell'LocalStorage, caricali nella tabella
     if (tableDataJSON) {
         const tableData = JSON.parse(tableDataJSON);
         const table = document.getElementById('schedule');
-        console.log(8);
+
         // Itera sui dati della tabella e popola la tabella con essi
-        tableData.forEach(rowData => {
+        tableData.forEach((rowData, rowIndex) => {
             const row = table.insertRow();
-            rowData.forEach(cellData => {
-                const cell = row.insertCell();
-                cell.textContent = cellData;
+            rowData.forEach((cellData, cellIndex) => {
+                // Se la cella non è nell'intestazione, verifica se corrisponde al giorno e all'ora
+                if (rowIndex > 0 && cellIndex > 0) {
+                    const giorno = table.rows[0].cells[cellIndex].textContent;
+                    const ora = table.rows[rowIndex].cells[0].textContent;
+                    if (giorno === rowData[0] && ora === tableData[0][cellIndex]) {
+                        const cell = row.insertCell();
+                        cell.textContent = cellData;
+                    }
+                }
             });
         });
-        console.log(9);
     }
 }
+
+
         
 // Chiamata alla funzione per caricare i dati della tabella dall'LocalStorage quando la pagina viene caricata
 window.addEventListener('load', loadTableDataFromLocalStorage);
