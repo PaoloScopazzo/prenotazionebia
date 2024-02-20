@@ -197,11 +197,13 @@ document.getElementById('schedule').addEventListener('click', function(event) {
     
     // Verifica se il clic è avvenuto all'interno di una cella editabile
     if (target.tagName === 'TD' && target.contentEditable === 'true') {
-        const ora = target.parentElement.cells[0].textContent;
-        const giorno = target.parentElement.cells[target.cellIndex].textContent;
-        const nome = target.textContent;
+        const currentRowIndex = focusedCell.parentElement.rowIndex;
+        const currentCellIndex = focusedCell.cellIndex;
+        const nome = getCellData(currentRowIndex,currentCellIndex); // Ottieni la cella specifica
+        const giorno = getCellData(0,currentCellIndex); // Ottieni la cella specifica
+        const ora = getCellData(currentRowIndex,0); // Ottieni la cella specifica
         const dati = { giorno: giorno, ora: ora, nome: nome };
-        console.log(data);
+        console.log(dati);
         // Chiama la funzione saveDataToDatabase con i valori ottenuti
         saveDataToDatabase(giorno, ora, nome);
     }
