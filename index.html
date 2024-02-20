@@ -217,18 +217,20 @@ function saveTableDataToLocalStorage() {
     console.log(4);
     // Salva i dati della tabella nell'LocalStorage
     localStorage.setItem('tableData', JSON.stringify(tableData));
+    console.log(5);
 }
 
 // Funzione per caricare i dati della tabella dall'LocalStorage
 function loadTableDataFromLocalStorage() {
     // Ottieni i dati della tabella dall'LocalStorage
+    console.log(6);
     const tableDataJSON = localStorage.getItem('tableData');
-    
+    console.log(7);
     // Se i dati sono presenti nell'LocalStorage, caricali nella tabella
     if (tableDataJSON) {
         const tableData = JSON.parse(tableDataJSON);
         const table = document.getElementById('schedule');
-
+        console.log(8);
         // Itera sui dati della tabella e popola la tabella con essi
         tableData.forEach(rowData => {
             const row = table.insertRow();
@@ -237,6 +239,7 @@ function loadTableDataFromLocalStorage() {
                 cell.textContent = cellData;
             });
         });
+        console.log(9);
     }
 }
         
