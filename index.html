@@ -219,7 +219,7 @@ function loadTableDataFromLocalStorage() {
 
         for (let i = 0; i < tableData.length; i++) {
             for (let j = 0; j < tableData[i].length; j++) {
-                const cell = table.rows[i].cells[j]];
+                const cell = table.rows[i].cells[j];
                 cell.textContent = tableData[i][j];
                 if (cell.textContent.trim() === '') {
                         cell.classList.remove('non-empty');
