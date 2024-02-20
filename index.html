@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualizzatore e Aggiornatore Foglio di Calcolo</title>
+    <!-- Carica l'API di Google -->
+    <script src="https://apis.google.com/js/api.js"></script>
 </head>
 <body>
     <h1>Dati del Foglio di Calcolo</h1>
@@ -11,8 +13,7 @@
         <!-- Qui verranno inseriti i dati del foglio di calcolo -->
     </table>
     <button onclick="updateSpreadsheet()">Aggiorna Foglio di Calcolo</button>
-<!-- Carica l'API di Google -->
-    <script src="https://apis.google.com/js/api.js"></script>
+
     <script>
         // ID del foglio di calcolo condiviso
         const SPREADSHEET_ID = '1f0LTsDeHUTE-pVmqgYqpwFVc1AFk94_0yGDKF4wnHsE';
