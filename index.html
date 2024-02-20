@@ -35,7 +35,7 @@
     </style>
 </head>
 <body>
-    <h1>Prenotazione BIA 6</h1>
+    <h1>Prenotazione BIA 5</h1>
     <table id="spreadsheet-data">
         <!-- Qui verranno inseriti i dati del foglio di calcolo -->
     </table>
@@ -47,25 +47,32 @@
 
         // Funzione per caricare i dati del foglio di calcolo
         function loadSpreadsheetData() {
-            gapi.client.sheets.spreadsheets.get({
+            gapi.client.sheets.spreadsheets.values.get({
                 spreadsheetId: SPREADSHEET_ID,
-                ranges: 'FEBBRAIO'
+                range: 'FEBBRAIO' // Cambia "Sheet1" con il nome del tuo foglio di lavoro se è diverso
             }).then(response => {
-                const sheetData = response.result.sheets.find(sheet => sheet.properties.title === 'FEBBRAIO');
+                const values = response.result.values;
                 const table = document.getElementById('spreadsheet-data');
                 table.innerHTML = '';
 
-                if (sheetData && sheetData.data && sheetData.data.length > 0) {
-                    const rowData = sheetData.data[0].rowData;
-                    rowData.forEach(row => {
+                if (values && values.length > 0) {
+                    values.forEach((row, rowIndex) => {
                         const tr = document.createElement('tr');
-                        row.values.forEach(cell => {
+                        row.forEach((cell, columnIndex) => {
                             const td = document.createElement('td');
-                            td.textContent = cell && cell.userEnteredValue ? cell.userEnteredValue.stringValue : '';
-                            td.contentEditable = true;
-                            if (cell && cell.userEnteredFormat && cell.userEnteredFormat.backgroundColor) {
-                                td.style.backgroundColor = cell.userEnteredFormat.backgroundColor;
+                            td.textContent = cell;
+                            td.contentEditable = true; // Permette la modifica del contenuto
+                            td.dataset.row = rowIndex;
+                            td.dataset.column = columnIndex;
+                            if (cell.trim() !== '') {
+                                td.classList.add('non-empty'); // Aggiunge la classe 'non-empty' se il contenuto non è vuoto
                             }
+                            td.addEventListener('blur', function() {
+                                const row = parseInt(this.dataset.row);
+                                const column = parseInt(this.dataset.column);
+                                const newValue = this.textContent;
+                                updateCellValue(row, column, newValue);
+                            });
                             tr.appendChild(td);
                         });
                         table.appendChild(tr);
@@ -75,6 +82,33 @@
                 }
             }, error => {
                 console.error('Errore nel caricamento dei dati del foglio di calcolo:', error.result.error.message);
+            });
+        }
+// Funzione per aggiornare il valore di una cella nel foglio di calcolo
+        function updateCellValue(row, column, newValue) {
+            gapi.client.sheets.spreadsheets.values.update({
+                spreadsheetId: SPREADSHEET_ID,
+                range: 'FEBBRAIO!' + String.fromCharCode(65 + column) + (row + 1), // Converti la coordinata della cella in formato A1
+                valueInputOption: 'RAW',
+                resource: { values: [[newValue]] }
+            }).then(response => {
+                console.log('Cella aggiornata con successo.');
+            }, error => {
+                console.error('Errore nell\'aggiornamento della cella:', error.result.error.message);
+            });
+        }
+         // Funzione per aggiornare il foglio di calcolo con i valori modificati nella tabella
+        function updateSpreadsheet() {
+            const table = document.getElementById('spreadsheet-data');
+            const cells = table.querySelectorAll('td');
+
+            cells.forEach(cell => {
+                cell.addEventListener('blur', () => {
+                    const row = parseInt(cell.dataset.row);
+                    const column = parseInt(cell.dataset.column);
+                    const newValue = cell.textContent;
+                    updateCellValue(row, column, newValue);
+                });
             });
         }
 
@@ -93,5 +127,7 @@
         // Carica il client dell'API di Google Sheets
         gapi.load('client', initClient);
     </script>
+
+    
 </body>
 </html>
