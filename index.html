@@ -32,29 +32,13 @@
         .non-empty {
             background-color: green; /* Colora il contenuto non vuoto di verde */
         }
-        button {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background-color: #F06D00; /* Arancione */
-            color: #000000; /* Nero */
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #FFA04D; /* Arancione più chiaro al passaggio del mouse */
-        }
     </style>
 </head>
 <body>
-    <h1>Prenotazione BIA 3</h1>
+    <h1>Prenotazione BIA 4</h1>
     <table id="spreadsheet-data">
         <!-- Qui verranno inseriti i dati del foglio di calcolo -->
     </table>
-    <button onclick="updateSpreadsheet()">Aggiorna Foglio di Calcolo</button>
-
     <script>
         // ID del foglio di calcolo condiviso
         const SPREADSHEET_ID = '1f0LTsDeHUTE-pVmqgYqpwFVc1AFk94_0yGDKF4wnHsE';
@@ -83,6 +67,14 @@
                             if (cell.trim() !== '') {
                                 td.classList.add('non-empty'); // Aggiunge la classe 'non-empty' se il contenuto non è vuoto
                             }
+                            td.addEventListener('keypress', function(event) {
+                                if (event.key === 'Enter') {
+                                    const row = parseInt(this.dataset.row);
+                                    const column = parseInt(this.dataset.column);
+                                    const newValue = this.textContent;
+                                    updateCellValue(row, column, newValue);
+                                }
+                            });
                             tr.appendChild(td);
                         });
                         table.appendChild(tr);
