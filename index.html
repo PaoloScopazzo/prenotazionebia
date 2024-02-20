@@ -194,12 +194,13 @@ loadScheduleTable();
 
 // Funzione per salvare i dati della tabella nell'LocalStorage
 function saveTableDataToLocalStorage() {
+    console.log(1);
     // Ottieni riferimento alla tabella
     const table = document.getElementById('schedule');
-    
+    console.log(2);
     // Inizializza un array per memorizzare i dati della tabella
     const tableData = [];
-
+    console.log(3);
     // Itera sulle righe della tabella (escludendo l'intestazione)
     for (let i = 1; i < table.rows.length; i++) {
         const row = table.rows[i];
@@ -213,7 +214,7 @@ function saveTableDataToLocalStorage() {
         // Aggiungi i dati della riga corrente all'array dei dati della tabella
         tableData.push(rowData);
     }
-
+    console.log(4);
     // Salva i dati della tabella nell'LocalStorage
     localStorage.setItem('tableData', JSON.stringify(tableData));
 }
