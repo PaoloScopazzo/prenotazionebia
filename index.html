@@ -35,7 +35,7 @@
     </style>
 </head>
 <body>
-    <h1>Prenotazione BIA 4</h1>
+    <h1>Prenotazione BIA 5</h1>
     <table id="spreadsheet-data">
         <!-- Qui verranno inseriti i dati del foglio di calcolo -->
     </table>
@@ -67,13 +67,11 @@
                             if (cell.trim() !== '') {
                                 td.classList.add('non-empty'); // Aggiunge la classe 'non-empty' se il contenuto non è vuoto
                             }
-                            td.addEventListener('keypress', function(event) {
-                                if (event.key === 'Enter') {
-                                    const row = parseInt(this.dataset.row);
-                                    const column = parseInt(this.dataset.column);
-                                    const newValue = this.textContent;
-                                    updateCellValue(row, column, newValue);
-                                }
+                            td.addEventListener('blur', function() {
+                                const row = parseInt(this.dataset.row);
+                                const column = parseInt(this.dataset.column);
+                                const newValue = this.textContent;
+                                updateCellValue(row, column, newValue);
                             });
                             tr.appendChild(td);
                         });
