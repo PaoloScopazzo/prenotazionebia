@@ -45,7 +45,7 @@
 </head>
 <body>
     <img id="logo" src="logo.png" alt="Logo">
-    <h1>Prenotazione BIA 12</h1>
+    <h1>Prenotazione BIA 13</h1>
     <table id="schedule">
         <!-- Qui verrà generata la tabella degli orari e dei giorni -->
     </table>
@@ -84,7 +84,7 @@ function loadScheduleTable() {
             timeSlotCell.contentEditable = true; // Imposta la cella come editabile
             timeSlotCell.addEventListener('input', function() {
                 if (this.textContent.trim() === '') {
-                    this.style.backgroundColor = '#8fbc8f'; // Imposta lo sfondo verde se la cella è vuota
+                    this.style.backgroundColor = 'white'; // Imposta lo sfondo verde se la cella è vuota
                 } else {
                     this.style.backgroundColor = '#db7093'; // Altrimenti, imposta lo sfondo rosso
                 }
