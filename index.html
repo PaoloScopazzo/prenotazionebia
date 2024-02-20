@@ -49,7 +49,7 @@
 <body>
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
-    <h2>Prenotazione BIA 53</h2>
+    <h2>Prenotazione BIA 54</h2>
         <table id="schedule">
             <!-- Qui verranno visualizzati i giorni -->
         </table>
@@ -68,7 +68,7 @@ function handleKeyboardNavigation(event) {
         const ora = getCellData(currentRowIndex,0); // Ottieni la cella specifica
         
         console.log('Dati:',cell,giorno,ora);
-        if (cell !== '') {
+        if (cell !== '') { // Check valore
             saveDataToDatabase(giorno, ora, cell);
         }
         let nextCell;
