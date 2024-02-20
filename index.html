@@ -45,7 +45,7 @@
 </head>
 <body>
     <img id="logo" src="logo.png" alt="Logo">
-    <h1>Prenotazione BIA 9</h1>
+    <h1>Prenotazione BIA 10</h1>
     <table id="schedule">
         <!-- Qui verrà generata la tabella degli orari e dei giorni -->
     </table>
@@ -81,6 +81,7 @@ function loadScheduleTable() {
         row.appendChild(timeCell); // Aggiungi l'orario nella prima colonna
         days.forEach(() => {
             const timeSlotCell = document.createElement('td');
+            timeSlotCell.contentEditable = true; // Imposta la cella come editabile
             // Puoi aggiungere ulteriori personalizzazioni qui, ad esempio input per gli appuntamenti
             row.appendChild(timeSlotCell);
         });
