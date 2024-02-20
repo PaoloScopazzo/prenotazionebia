@@ -192,34 +192,12 @@ function getDaysInRange(startDate, endDate) {
 // Chiamata alla funzione per caricare la tabella degli orari e dei giorni
 loadScheduleTable();     
 
-document.getElementById('schedule').addEventListener('click', function(event) {
-    const table = document.getElementById('schedule');
-    const focusedCell = document.activeElement;
-    
-    if (focusedCell.tagName === 'TD') {
-    
-        // Verifica se il clic è avvenuto all'interno di una cella editabile
-        if (focusedCell.tagName === 'TD' && focusedCell.contentEditable === 'true') {
-            const currentRowIndex = focusedCell.parentElement.rowIndex;
-            const currentCellIndex = focusedCell.cellIndex;
-            const nome = getCellData(currentRowIndex,currentCellIndex); // Ottieni la cella specifica
-            const giorno = getCellData(0,currentCellIndex); // Ottieni la cella specifica
-            const ora = getCellData(currentRowIndex,0); // Ottieni la cella specifica
-            const dati = { giorno: giorno, ora: ora, nome: nome };
-            console.log(dati);
-            // Chiama la funzione saveDataToDatabase con i valori ottenuti
-            saveDataToDatabase(giorno, ora, nome);
-        }
-    }
-});
-
-
 //Funzione di salvataggio
 function saveDataToDatabase(giorno, ora, nome) {
     const data = `${giorno}, ${ora}, ${nome}\n`;
 
     window.webkitRequestFileSystem(window.TEMPORARY, 1024 * 1024, function(fs) {
-        fs.root.getFile('dati.txt', {create: true}, function(fileEntry) {
+        fs.root.getFile('c:\dati.txt', {create: true}, function(fileEntry) {
             fileEntry.createWriter(function(fileWriter) {
                 fileWriter.seek(fileWriter.length);
                 const blob = new Blob([data], {type: 'text/plain'});
