@@ -180,16 +180,18 @@ loadScheduleTable();
 
 function saveDataToDatabase(giorno, ora, nome) {
     const data = { giorno: giorno, ora: ora, nome: nome };
-    
+    console.log('1');
     // Apri il database o crea uno nuovo se non esiste
     const request = window.indexedDB.open('scheduleDatabase', 1);
-    
+    console.log('2');
     // Gestisci l'evento di upgrade durante l'apertura del database (crea l'object store)
     request.onupgradeneeded = function(event) {
         const db = event.target.result;
+        console.log('3');
         if (!db.objectStoreNames.contains('scheduleData')) {
             const objectStore = db.createObjectStore('scheduleData', { keyPath: ['giorno', 'ora', 'nome'] });
             // Specifica giorno e ora come chiavi primarie
+            console.log('4');
         }
     };
     
