@@ -27,19 +27,6 @@
             display: block; /* Imposta il logo come blocco per centrarlo facilmente */
             margin: 0 auto; /* Centra il logo orizzontalmente */
         }
-        #table-container {
-            overflow-x: auto; /* Abilita lo scorrimento orizzontale */
-            display: flex; /* Utilizza il layout flessibile */
-        }
-        #time-column {
-            width: 100px; /* Larghezza fissa per la colonna dell'ora */
-            background-color: #f0f0f0; /* Colore di sfondo per la colonna dell'ora */
-            flex-shrink: 0; /* Evita che la colonna dell'ora si restringa */
-        }
-        #schedule-container {
-            overflow-x: hidden; /* Nasconde lo scorrimento orizzontale */
-            flex-grow: 1; /* Consente alla parte dei giorni di espandersi per riempire lo spazio rimanente */
-        }
         #schedule {
             width: 100%; /* Imposta la larghezza della tabella dei giorni al 100% */
             border-collapse: collapse; /* Unisce i bordi delle celle */
@@ -74,19 +61,31 @@
 <body>
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
-    <h2>Prenotazione BIA 29</h2>
-    <div id="table-container">
-        <div id="time-column">
-            <!-- Qui verranno visualizzati gli orari -->
-        </div>
-        <div id="schedule-container">
-            <table id="schedule">
-                <!-- Qui verranno visualizzati i giorni -->
-            </table>
-        </div>
-    </div>
+    <h2>Prenotazione BIA 30</h2>
+        <table id="schedule">
+            <!-- Qui verranno visualizzati i giorni -->
+        </table>
     <script>
-                
+    // Aggiungi un evento click alle celle della tabella
+    const cells = document.querySelectorAll('#schedule td');
+    cells.forEach(cell => {
+        cell.addEventListener('click', function() {
+            // Ottieni l'indice della riga e della colonna della cella selezionata
+            const rowIndex = this.parentElement.rowIndex;
+            const colIndex = this.cellIndex;
+
+            // Ottieni la data e l'ora corrispondente alla riga e alla colonna della cella selezionata
+            const currentDate = new Date();
+            const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + rowIndex, currentDate.getDate() + colIndex);
+
+            // Formatta la data e l'ora
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
+            const dateString = selectedDate.toLocaleDateString('it-IT', options);
+
+            // Imposta il valore della cella con la data e l'ora formattate
+            this.textContent = dateString;
+        });
+    });
 // Funzione per gestire la navigazione tra le celle della tabella utilizzando le frecce della tastiera
 function handleKeyboardNavigation(event) {
     const table = document.getElementById('schedule');
