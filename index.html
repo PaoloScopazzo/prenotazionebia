@@ -63,7 +63,7 @@
 <body>
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
-    <h2>Prenotazione BIA 24</h2>
+    <h2>Prenotazione BIA 25</h2>
     <table id="schedule">
         <!-- Qui verrà generata la tabella degli orari e dei giorni -->
     </table>
@@ -72,29 +72,6 @@
     </table>
     <script>
         
-// Funzione per evidenziare la riga e la colonna della cella che si sta modificando
-function highlightRowAndColumn(cell) {
-    // Rimuove eventuali evidenziazioni precedenti
-    const table = document.getElementById('schedule');
-    table.querySelectorAll('.highlighted-row').forEach(element => {
-        element.classList.remove('highlighted-row');
-    });
-    table.querySelectorAll('.highlighted-column').forEach(element => {
-        element.classList.remove('highlighted-column');
-    });
-
-    // Evidenzia la riga
-    const row = cell.parentElement;
-    row.classList.add('highlighted-row');
-
-    // Evidenzia la colonna
-    const columnIndex = cell.cellIndex;
-    table.querySelectorAll(`tr td:nth-child(${columnIndex + 1})`).forEach(element => {
-        element.classList.add('highlighted-column');
-    });
-}
-
-
 // Aggiungi un gestore eventi per l'input alle celle della tabella
 const cells = document.querySelectorAll('#schedule td');
 cells.forEach(cell => {
@@ -102,7 +79,6 @@ cells.forEach(cell => {
         highlightRowAndColumn(this);
     });
 });
-
         
 // Funzione per gestire la navigazione tra le celle della tabella utilizzando le frecce della tastiera
 function handleKeyboardNavigation(event) {
@@ -145,7 +121,14 @@ function loadScheduleTable() {
     const table = document.getElementById('schedule');
     table.innerHTML = ''; // Pulisce la tabella
 
-    const days = getDaysInRange(new Date('2024-02-01'), new Date('2024-04-30')); // Ottieni i giorni da febbraio ad aprile
+    // Ottieni la data corrente
+    const currentDate = new Date();
+    
+    // Calcola la data di inizio e fine per il range di due mesi
+    const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 2, 0);
+
+    const days = getDaysInRange(startDate, endDate); // Ottieni i giorni da febbraio ad aprile
     const times = generateTimeSlots(); // Genera gli slot di tempo da 09:00 a 20:15 a intervalli di 15 minuti
 
     // Crea l'intestazione delle colonne con i giorni
