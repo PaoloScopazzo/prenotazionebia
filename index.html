@@ -50,9 +50,10 @@
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
     <h2>Prenotazione BIA</h2>
-        <table id="schedule">
-            <!-- Qui verranno visualizzati i giorni -->
-        </table>
+    <button id="exportButton">Esporta CSV</button>
+    <table id="schedule">
+        <!-- Qui verranno visualizzati i giorni -->
+    </table>
     <script>
         
 // Funzione per gestire la navigazione tra le celle della tabella utilizzando le frecce della tastiera
@@ -233,6 +234,49 @@ function loadTableDataFromLocalStorage() {
     }
 }
 
+
+
+
+// Funzione per gestire il click sul pulsante di esportazione CSV
+document.getElementById('exportButton').addEventListener('click', function() {
+    exportTableToCSV('schedule.csv');
+});
+
+// Funzione per esportare i dati della tabella in un file CSV
+function exportTableToCSV(filename) {
+    const table = document.getElementById('schedule');
+    const rows = table.rows;
+    let csvContent = '';
+
+    // Aggiungi intestazione al file CSV
+    csvContent += 'giorno;ora;nome\n';
+
+    // Itera attraverso le righe della tabella e aggiungi i dati al CSV
+    for (let i = 1; i < rows.length; i++) {
+        const cells = rows[i].cells;
+        const giorno = cells[0].textContent;
+        for (let j = 1; j < cells.length; j++) {
+            const ora = table.rows[0].cells[j].textContent;
+            const nome = cells[j].textContent;
+            csvContent += `${giorno};${ora};${nome}\n`;
+        }
+    }
+
+    // Crea un oggetto Blob contenente i dati CSV
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    // Crea un URL oggetto per il blob e crea un link per il download
+    const link = document.createElement('a');
+    if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
 
 // Chiamata alla funzione per caricare la tabella quando la pagina viene caricata
 window.addEventListener('load', function() {
