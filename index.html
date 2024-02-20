@@ -49,7 +49,7 @@
 <body>
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
-    <h2>Prenotazione BIA 47</h2>
+    <h2>Prenotazione BIA 48</h2>
         <table id="schedule">
             <!-- Qui verranno visualizzati i giorni -->
         </table>
@@ -181,32 +181,32 @@ loadScheduleTable();
 function saveDataToDatabase(giorno, ora, nome) {
 
     const data = { giorno: giorno, ora: ora, nome: nome };
-    
+    console.log('Dati:',data);
     // Apri il database o crea uno nuovo se non esiste
     const request = window.indexedDB.open('scheduleDatabase', 1);
     
     // Gestisci l'evento di successo durante l'apertura del database
     request.onsuccess = function(event) {
         const db = event.target.result;
-        
+            
         // Crea una transazione di lettura/scrittura
         const transaction = db.transaction(['scheduleData'], 'readwrite');
-        
+            
         // Ottieni l'object store
         const objectStore = transaction.objectStore('scheduleData');
-        
+            
         // Aggiungi i dati all'object store
         const addRequest = objectStore.add(data);
-        
+            
         // Gestisci l'evento di successo dell'aggiunta dei dati
         addRequest.onsuccess = function(event) {
             console.log('Dati aggiunti con successo al database.');
         };
-        
+            
         // Gestisci l'evento di errore dell'aggiunta dei dati
         addRequest.onerror = function(event) {
-            console.error('Errore durante l\'aggiunta dei dati al database:', event.target.error);
-        };
+                console.error('Errore durante l\'aggiunta dei dati al database:', event.target.error);
+            };
     };
     
     // Gestisci l'evento di errore durante l'apertura del database
