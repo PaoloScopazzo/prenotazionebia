@@ -193,20 +193,23 @@ function getDaysInRange(startDate, endDate) {
 loadScheduleTable();     
 
 document.getElementById('schedule').addEventListener('click', function(event) {
-    const target = event.target;
+    const table = document.getElementById('schedule');
+    const focusedCell = document.activeElement;
     
-    // Verifica se il clic è avvenuto all'interno di una cella editabile
-    if (target.tagName === 'TD' && target.contentEditable === 'true') {
-        const currentRowIndex = focusedCell.parentElement.rowIndex;
-        const currentCellIndex = focusedCell.cellIndex;
-        const nome = getCellData(currentRowIndex,currentCellIndex); // Ottieni la cella specifica
-        const giorno = getCellData(0,currentCellIndex); // Ottieni la cella specifica
-        const ora = getCellData(currentRowIndex,0); // Ottieni la cella specifica
-        const dati = { giorno: giorno, ora: ora, nome: nome };
-        console.log(dati);
-        // Chiama la funzione saveDataToDatabase con i valori ottenuti
-        saveDataToDatabase(giorno, ora, nome);
-    }
+    if (focusedCell.tagName === 'TD') {
+    
+        // Verifica se il clic è avvenuto all'interno di una cella editabile
+        if (focusedCell.tagName === 'TD' && focusedCell.contentEditable === 'true') {
+            const currentRowIndex = focusedCell.parentElement.rowIndex;
+            const currentCellIndex = focusedCell.cellIndex;
+            const nome = getCellData(currentRowIndex,currentCellIndex); // Ottieni la cella specifica
+            const giorno = getCellData(0,currentCellIndex); // Ottieni la cella specifica
+            const ora = getCellData(currentRowIndex,0); // Ottieni la cella specifica
+            const dati = { giorno: giorno, ora: ora, nome: nome };
+            console.log(dati);
+            // Chiama la funzione saveDataToDatabase con i valori ottenuti
+            saveDataToDatabase(giorno, ora, nome);
+        }
 });
 
 
