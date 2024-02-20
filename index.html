@@ -216,53 +216,22 @@ document.getElementById('schedule').addEventListener('click', function(event) {
 
 //Funzione di salvataggio
 function saveDataToDatabase(giorno, ora, nome) {
-    if (nome !== '') {
-        const data = { giorno: giorno, ora: ora, nome: nome };
-        console.log('1');
-        // Apri il database o crea uno nuovo se non esiste
-        const request = window.indexedDB.open('scheduleDatabase', 1);
-        console.log('2');
-        
-        // Gestisci l'evento di upgrade durante l'apertura del database (crea l'object store)
-        request.onupgradeneeded = function(event) {
-            const db = event.target.result;
-            console.log('3');
-            if (!db.objectStoreNames.contains('scheduleData')) {
-                const objectStore = db.createObjectStore('scheduleData', { keyPath: ['giorno', 'ora', 'nome'] });
-                // Specifica giorno, ora e nome come chiavi primarie
-                console.log('4');
-            }
-        };
-        
-        // Gestisci l'evento di successo durante l'apertura del database
-        request.onsuccess = function(event) {
-            const db = event.target.result;
-            console.log('5');
-            // Crea una transazione di lettura/scrittura
-            const transaction = db.transaction(['scheduleData'], 'readwrite');
-            console.log('6');
-            // Ottieni l'object store
-            const objectStore = transaction.objectStore('scheduleData');
-            
-            // Aggiungi i dati all'object store
-            const putRequest = objectStore.put(data);
-            
-            // Gestisci l'evento di successo dell'aggiunta dei dati
-            putRequest.onsuccess = function(event) {
-                console.log('Dati aggiunti con successo al database.');
-            };
-            
-            // Gestisci l'evento di errore dell'aggiunta dei dati
-            putRequest.onerror = function(event) {
-                console.error('Errore durante l\'aggiunta dei dati al database:', event.target.error);
-            };
-        };
-        
-        // Gestisci l'evento di errore durante l'apertura del database
-        request.onerror = function(event) {
-            console.error('Errore durante l\'apertura del database:', event.target.error);
-        };
-    }
+    const data = `${giorno}, ${ora}, ${nome}\n`;
+
+    window.webkitRequestFileSystem(window.TEMPORARY, 1024 * 1024, function(fs) {
+        fs.root.getFile('dati.txt', {create: true}, function(fileEntry) {
+            fileEntry.createWriter(function(fileWriter) {
+                fileWriter.seek(fileWriter.length);
+                const blob = new Blob([data], {type: 'text/plain'});
+                fileWriter.write(blob);
+                console.log('Dati salvati correttamente nel file dati.txt');
+            }, errorHandler);
+        }, errorHandler);
+    }, errorHandler);
+}
+
+function errorHandler(error) {
+    console.error('Errore:', error);
 }
 
 
