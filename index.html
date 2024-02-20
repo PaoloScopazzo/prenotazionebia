@@ -218,6 +218,8 @@ function saveTableDataToLocalStorage() {
     // Salva i dati della tabella nell'LocalStorage
     localStorage.setItem('tableData', JSON.stringify(tableData));
     console.log(5);
+    loadTableDataFromLocalStorage();
+    console.log(6);
 }
 
 // Funzione per caricare i dati della tabella dall'LocalStorage
