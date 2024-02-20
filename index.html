@@ -49,7 +49,7 @@
     </style>
 </head>
 <body>
-    <h1>Prenotazione BIA 2</h1>
+    <h1>Prenotazione BIA 3</h1>
     <table id="spreadsheet-data">
         <!-- Qui verranno inseriti i dati del foglio di calcolo -->
     </table>
@@ -72,11 +72,17 @@
                 table.innerHTML = '';
 
                 if (values && values.length > 0) {
-                    values.forEach(row => {
+                    values.forEach((row, rowIndex) => {
                         const tr = document.createElement('tr');
-                        row.forEach(cell => {
+                        row.forEach((cell, columnIndex) => {
                             const td = document.createElement('td');
                             td.textContent = cell;
+                            td.contentEditable = true; // Permette la modifica del contenuto
+                            td.dataset.row = rowIndex;
+                            td.dataset.column = columnIndex;
+                            if (cell.trim() !== '') {
+                                td.classList.add('non-empty'); // Aggiunge la classe 'non-empty' se il contenuto non è vuoto
+                            }
                             tr.appendChild(td);
                         });
                         table.appendChild(tr);
@@ -85,7 +91,7 @@
                     console.log('Nessun dato trovato.');
                 }
             }, error => {
-                console.error(`Errore nel caricamento dei dati del foglio di calcolo: ${error}`);
+                console.error('Errore nel caricamento dei dati del foglio di calcolo:', error.result.error.message);
             });
         }
 // Funzione per aggiornare il valore di una cella nel foglio di calcolo
