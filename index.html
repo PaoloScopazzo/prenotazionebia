@@ -35,7 +35,7 @@
     </style>
 </head>
 <body>
-    <h1>Prenotazione BIA 5</h1>
+    <h1>Prenotazione BIA 6</h1>
     <table id="spreadsheet-data">
         <!-- Qui verranno inseriti i dati del foglio di calcolo -->
     </table>
@@ -45,45 +45,62 @@
         // ID della tabella nel foglio di calcolo (di solito 0)
         const SHEET_ID = 0;
 
-        // Funzione per caricare i dati del foglio di calcolo
-        function loadSpreadsheetData() {
-            gapi.client.sheets.spreadsheets.values.get({
+function loadSpreadsheetData() {
+    gapi.client.sheets.spreadsheets.get({
+        spreadsheetId: SPREADSHEET_ID
+    }).then(response => {
+        const sheets = response.result.sheets;
+        sheets.forEach(sheet => {
+            const table = document.createElement('table');
+            table.innerHTML = `<caption>${sheet.properties.title}</caption>`;
+            const sheetId = sheet.properties.sheetId;
+            gapi.client.sheets.spreadsheets.get({
                 spreadsheetId: SPREADSHEET_ID,
-                range: 'FEBBRAIO' // Cambia "Sheet1" con il nome del tuo foglio di lavoro se è diverso
+                ranges: [`${sheet.properties.title}!A1:Z100`],
+                fields: 'sheets(properties,sheetId,data.rowData.values.userEnteredFormat.backgroundColor)',
             }).then(response => {
-                const values = response.result.values;
-                const table = document.getElementById('spreadsheet-data');
-                table.innerHTML = '';
-
-                if (values && values.length > 0) {
-                    values.forEach((row, rowIndex) => {
+                const sheetData = response.result.sheets.find(sheet => sheet.properties.sheetId === sheetId);
+                if (sheetData && sheetData.data && sheetData.data.length > 0) {
+                    const rowData = sheetData.data[0].rowData;
+                    rowData.forEach((row, rowIndex) => {
                         const tr = document.createElement('tr');
-                        row.forEach((cell, columnIndex) => {
-                            const td = document.createElement('td');
-                            td.textContent = cell;
-                            td.contentEditable = true; // Permette la modifica del contenuto
-                            td.dataset.row = rowIndex;
-                            td.dataset.column = columnIndex;
-                            if (cell.trim() !== '') {
-                                td.classList.add('non-empty'); // Aggiunge la classe 'non-empty' se il contenuto non è vuoto
-                            }
-                            td.addEventListener('blur', function() {
-                                const row = parseInt(this.dataset.row);
-                                const column = parseInt(this.dataset.column);
-                                const newValue = this.textContent;
-                                updateCellValue(row, column, newValue);
+                        if (row.values) {
+                            row.values.forEach((cell, columnIndex) => {
+                                const td = document.createElement('td');
+                                td.textContent = cell.userEnteredValue ? cell.userEnteredValue.stringValue : '';
+                                td.contentEditable = true; // Permette la modifica del contenuto
+                                td.dataset.row = rowIndex;
+                                td.dataset.column = columnIndex;
+                                if (cell.userEnteredFormat && cell.userEnteredFormat.backgroundColor) {
+                                    td.style.backgroundColor = cell.userEnteredFormat.backgroundColor;
+                                }
+                                td.addEventListener('blur', function() {
+                                    const row = parseInt(this.dataset.row);
+                                    const column = parseInt(this.dataset.column);
+                                    const newValue = this.textContent;
+                                    updateCellValue(row, column, newValue);
+                                });
+                                tr.appendChild(td);
                             });
-                            tr.appendChild(td);
-                        });
+                        }
                         table.appendChild(tr);
                     });
                 } else {
                     console.log('Nessun dato trovato.');
                 }
+                document.body.appendChild(table);
             }, error => {
                 console.error('Errore nel caricamento dei dati del foglio di calcolo:', error.result.error.message);
             });
-        }
+        });
+    }, error => {
+        console.error('Errore nel caricamento del foglio di calcolo:', error.result.error.message);
+    });
+}
+
+
+
+        
 // Funzione per aggiornare il valore di una cella nel foglio di calcolo
         function updateCellValue(row, column, newValue) {
             gapi.client.sheets.spreadsheets.values.update({
