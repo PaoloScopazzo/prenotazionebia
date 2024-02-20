@@ -54,7 +54,7 @@
 <body>
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
-    <h2>Prenotazione BIA 16</h2>
+    <h2>Prenotazione BIA 17</h2>
     <table id="schedule">
         <!-- Qui verrà generata la tabella degli orari e dei giorni -->
     </table>
@@ -195,98 +195,6 @@ function getDaysInRange(startDate, endDate) {
 // Chiamata alla funzione per caricare la tabella degli orari e dei giorni
 loadScheduleTable();
 
-        
-        // ID del foglio di calcolo condiviso
-        const SPREADSHEET_ID = '1f0LTsDeHUTE-pVmqgYqpwFVc1AFk94_0yGDKF4wnHsE';
-        // ID della tabella nel foglio di calcolo (di solito 0)
-        const SHEET_ID = 0;
-
-        // Funzione per caricare i dati del foglio di calcolo
-        function loadSpreadsheetData() {
-            gapi.client.sheets.spreadsheets.values.get({
-                spreadsheetId: SPREADSHEET_ID,
-                range: 'FEBBRAIO' // Cambia "Sheet1" con il nome del tuo foglio di lavoro se è diverso
-            }).then(response => {
-                const values = response.result.values;
-                const table = document.getElementById('spreadsheet-data');
-                table.innerHTML = '';
-
-                if (values && values.length > 0) {
-                    values.forEach((row, rowIndex) => {
-                        const tr = document.createElement('tr');
-                        row.forEach((cell, columnIndex) => {
-                            const td = document.createElement('td');
-                            td.textContent = cell;
-                            td.contentEditable = true; // Permette la modifica del contenuto
-                            td.dataset.row = rowIndex;
-                            td.dataset.column = columnIndex;
-                            if (cell.trim() !== '') {
-                                td.classList.add('non-empty'); // Aggiunge la classe 'non-empty'
-                            }
-                            if (cell.trim() == '') {
-                                td.classList.add('empty'); // Aggiunge la classe 'empty'
-                            }
-                            td.addEventListener('blur', function() {
-                                const row = parseInt(this.dataset.row);
-                                const column = parseInt(this.dataset.column);
-                                const newValue = this.textContent;
-                                updateCellValue(row, column, newValue);
-                            });
-                            tr.appendChild(td);
-                        });
-                        table.appendChild(tr);
-                    });
-                } else {
-                    console.log('Nessun dato trovato.');
-                }
-            }, error => {
-                console.error('Errore nel caricamento dei dati del foglio di calcolo:', error.result.error.message);
-            });
-        }
-// Funzione per aggiornare il valore di una cella nel foglio di calcolo
-        function updateCellValue(row, column, newValue) {
-            gapi.client.sheets.spreadsheets.values.update({
-                spreadsheetId: SPREADSHEET_ID,
-                range: 'FEBBRAIO!' + String.fromCharCode(65 + column) + (row + 1), // Converti la coordinata della cella in formato A1
-                valueInputOption: 'RAW',
-                resource: { values: [[newValue]] }
-            }).then(response => {
-                console.log('Cella aggiornata con successo.');
-            }, error => {
-                console.error('Errore nell\'aggiornamento della cella:', error.result.error.message);
-            });
-        }
-         // Funzione per aggiornare il foglio di calcolo con i valori modificati nella tabella
-        function updateSpreadsheet() {
-            const table = document.getElementById('spreadsheet-data');
-            const cells = table.querySelectorAll('td');
-
-            cells.forEach(cell => {
-                cell.addEventListener('blur', () => {
-                    const row = parseInt(cell.dataset.row);
-                    const column = parseInt(cell.dataset.column);
-                    const newValue = cell.textContent;
-                    updateCellValue(row, column, newValue);
-                });
-            });
-        }
-
-        // Inizializzazione dell'API di Google Sheets
-        function initClient() {
-            gapi.client.init({
-                apiKey: 'AIzaSyBkOe-zFT15kggPuwA6yFG5bL_Wcl29nT8',
-                discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest'],
-            }).then(() => {
-                loadSpreadsheetData(); // Carica i dati del foglio di calcolo all'inizializzazione
-            }, error => {
-                console.error(`Errore nell'inizializzazione del client Google Sheets API: ${error}`);
-            });
-        }
-
-        // Carica il client dell'API di Google Sheets
-        gapi.load('client', initClient);
-    </script>
-
-    
+</script>    
 </body>
 </html>
