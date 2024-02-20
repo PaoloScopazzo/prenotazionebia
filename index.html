@@ -206,7 +206,7 @@ function saveDataToDatabase(giorno, ora, nome) {
         const objectStore = transaction.objectStore('scheduleData');
         
         // Aggiungi i dati all'object store
-        const addRequest = objectStore.add(data);
+        const putRequest = objectStore.put(data);
         
         // Gestisci l'evento di successo dell'aggiunta dei dati
         addRequest.onsuccess = function(event) {
