@@ -59,11 +59,11 @@
 function handleKeyboardNavigation(event) {
     const table = document.getElementById('schedule');
     const focusedCell = document.activeElement;
-
+    
     if (focusedCell.tagName === 'TD') {
         const currentRowIndex = focusedCell.parentElement.rowIndex;
         const currentCellIndex = focusedCell.cellIndex;
-
+        console.log('Dati:');
         let nextCell;
         
         switch (event.key) {
@@ -164,9 +164,9 @@ function getDaysInRange(startDate, endDate) {
 }
 
 // Chiamata alla funzione per caricare la tabella degli orari e dei giorni
-loadScheduleTable();      
-</script>
+loadScheduleTable();     
 
+</script>
 
 </body>
 </html>
