@@ -81,8 +81,6 @@ function handleKeyboardNavigation(event) {
                 break;
         }
         
-        saveScheduleData();
-        
         if (nextCell) {
             nextCell.focus();
             event.preventDefault(); // Evita il comportamento predefinito della tastiera
@@ -168,8 +166,6 @@ function getDaysInRange(startDate, endDate) {
 // Chiamata alla funzione per caricare la tabella degli orari e dei giorni
 loadScheduleTable();
 
-</script>
-
 // Funzione per salvare i dati della tabella nel database locale
 function saveScheduleData() {
     const table = document.getElementById('schedule');
@@ -200,6 +196,9 @@ function saveScheduleData() {
 
 // Chiamata alla funzione per salvare i dati della tabella nel database locale
 saveScheduleData();
+        
+</script>
+
 
 </body>
 </html>
