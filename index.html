@@ -54,71 +54,6 @@
             <!-- Qui verranno visualizzati i giorni -->
         </table>
     <script>
-// Funzione per caricare i dati della tabella dall'LocalStorage
-function loadTableDataFromLocalStorage() {
-    // Ottieni i dati della tabella dall'LocalStorage
-    const tableDataJSON = localStorage.getItem('tableData');
-    
-    // Se i dati sono presenti nell'LocalStorage, caricali nella tabella
-    if (tableDataJSON) {
-        const tableData = JSON.parse(tableDataJSON);
-        const table = document.getElementById('schedule');
-
-        // Elimina le righe esistenti dalla tabella
-        while (table.rows.length > 0) {
-            table.deleteRow(0);
-        }
-
-        // Itera sui dati della tabella e popola la tabella con essi
-        tableData.forEach((rowData, rowIndex) => {
-            const row = table.insertRow();
-            rowData.forEach((cellData, cellIndex) => {
-                // Se la cella non è nell'intestazione, verifica se corrisponde al giorno e all'ora
-                if (rowIndex > 0 && cellIndex > 0) {
-                    const headerRow = table.rows[0]; // Ottieni la riga dell'intestazione
-                    const giornoCell = headerRow ? headerRow.cells[cellIndex] : null; // Verifica se la riga dell'intestazione esiste
-                    const giorno = giornoCell ? giornoCell.textContent : ''; // Verifica se la cella del giorno esiste e accedi al suo contenuto
-
-                    const ora = table.rows[rowIndex].cells[0].textContent;
-                    if (giorno === rowData[0] && ora === tableData[rowIndex][0]) {
-                        const cell = row.insertCell();
-                        cell.textContent = cellData;
-                    }
-                }
-            });
-        });
-    }
-}
-
-// Chiamata alla funzione per caricare i dati della tabella dall'LocalStorage quando la pagina viene caricata
-window.addEventListener('load', loadTableDataFromLocalStorage);
-
-// Funzione per salvare i dati della tabella nell'LocalStorage
-function saveTableDataToLocalStorage() {
-    // Ottieni riferimento alla tabella
-    const table = document.getElementById('schedule');
-
-    // Inizializza un array per memorizzare i dati della tabella
-    const tableData = [];
-
-    // Itera sulle righe della tabella (escludendo l'intestazione)
-    for (let i = 1; i < table.rows.length; i++) {
-        const row = table.rows[i];
-        const rowData = [];
-
-        // Itera sulle celle della riga corrente
-        for (let j = 0; j < row.cells.length; j++) {
-            rowData.push(row.cells[j].textContent);
-        }
-
-        // Aggiungi i dati della riga corrente all'array dei dati della tabella
-        tableData.push(rowData);
-    }
-
-    // Salva i dati della tabella nell'LocalStorage
-    localStorage.setItem('tableData', JSON.stringify(tableData));
-}
-
         
 // Funzione per gestire la navigazione tra le celle della tabella utilizzando le frecce della tastiera
 function handleKeyboardNavigation(event) {
@@ -138,14 +73,14 @@ function handleKeyboardNavigation(event) {
             case 'ArrowUp':
                 console.log('Dati:',cell,giorno,ora);
                 if (cell !== '') { // Check valore
-                    saveTableDataToLocalStorage();
+                    //saveTableDataToLocalStorage();
                 }
                 nextCell = table.rows[currentRowIndex - 1]?.cells[currentCellIndex];
                 break;
             case 'ArrowDown':
                 console.log('Dati:',cell,giorno,ora);
                 if (cell !== '') { // Check valore
-                    saveTableDataToLocalStorage();
+                    //saveTableDataToLocalStorage();
                 }
                 nextCell = table.rows[currentRowIndex + 1]?.cells[currentCellIndex];
                 break;
@@ -153,13 +88,13 @@ function handleKeyboardNavigation(event) {
                 nextCell = focusedCell.previousElementSibling;
                 console.log('Dati:',cell,giorno,ora);
                 if (cell !== '') { // Check valore
-                    saveTableDataToLocalStorage();
+                    //saveTableDataToLocalStorage();
                 }
                 break;
             case 'ArrowRight':
                 console.log('Dati:',cell,giorno,ora);
                 if (cell !== '') { // Check valore
-                    saveTableDataToLocalStorage();
+                    //saveTableDataToLocalStorage();
                 }
                 nextCell = focusedCell.nextElementSibling;
                 break;
