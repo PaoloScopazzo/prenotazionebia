@@ -243,7 +243,8 @@ function loadTableDataFromLocalStorage() {
             rowData.forEach((cellData, cellIndex) => {
                 // Se la cella non è nell'intestazione, verifica se corrisponde al giorno e all'ora
                 if (rowIndex > 0 && cellIndex > 0) {
-                    const giorno = table.rows[0].cells[cellIndex].textContent;
+                    const giornoCell = table.rows[0]?.cells[cellIndex];
+                    const giorno = giornoCell ? giornoCell.textContent : '';
                     const ora = table.rows[rowIndex].cells[0].textContent;
                     if (giorno === rowData[0] && ora === tableData[0][cellIndex]) {
                         const cell = row.insertCell();
@@ -255,11 +256,9 @@ function loadTableDataFromLocalStorage() {
     }
 }
 
-
-
         
 // Chiamata alla funzione per caricare i dati della tabella dall'LocalStorage quando la pagina viene caricata
-//window.addEventListener('load', loadTableDataFromLocalStorage);
+window.addEventListener('load', loadTableDataFromLocalStorage);
         
 </script>
 
