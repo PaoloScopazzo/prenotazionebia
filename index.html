@@ -45,7 +45,7 @@
 </head>
 <body>
     <img id="logo" src="logo.png" alt="Logo">
-    <h1>Prenotazione BIA 7</h1>
+    <h1>Prenotazione BIA 8</h1>
     <table id="spreadsheet-data">
         <!-- Qui verranno inseriti i dati del foglio di calcolo -->
     </table>
@@ -75,7 +75,10 @@
                             td.dataset.row = rowIndex;
                             td.dataset.column = columnIndex;
                             if (cell.trim() !== '') {
-                                td.classList.add('non-empty'); // Aggiunge la classe 'non-empty' se il contenuto non è vuoto
+                                td.classList.add('non-empty'); // Aggiunge la classe 'non-empty'
+                            }
+                            if (cell.trim() == '') {
+                                td.classList.add('empty'); // Aggiunge la classe 'empty'
                             }
                             td.addEventListener('blur', function() {
                                 const row = parseInt(this.dataset.row);
