@@ -185,40 +185,40 @@ function saveDataToDatabase(giorno, ora, nome) {
     const request = window.indexedDB.open('scheduleDatabase', 1);
     console.log('2');
     // Gestisci l'evento di upgrade durante l'apertura del database (crea l'object store)
-    request.onupgradeneeded = function(event) {
-        const db = event.target.result;
-        console.log('3');
-        if (!db.objectStoreNames.contains('scheduleData')) {
-            const objectStore = db.createObjectStore('scheduleData', { keyPath: ['giorno', 'ora', 'nome'] });
-            // Specifica giorno e ora come chiavi primarie
-            console.log('4');
-        }
-    };
-    
-    // Gestisci l'evento di successo durante l'apertura del database
-    request.onsuccess = function(event) {
-        const db = event.target.result;
-        
-        // Crea una transazione di lettura/scrittura
-        const transaction = db.transaction(['scheduleData'], 'readwrite');
-        
-        // Ottieni l'object store
-        const objectStore = transaction.objectStore('scheduleData');
-        
-        // Aggiungi i dati all'object store
-        const putRequest = objectStore.put(data);
-        
-        // Gestisci l'evento di successo dell'aggiunta dei dati
-        addRequest.onsuccess = function(event) {
-            console.log('Dati aggiunti con successo al database.');
+
+    const db = event.target.result;
+    console.log('3');
+    if (!db.objectStoreNames.contains('scheduleData')) {
+        const objectStore = db.createObjectStore('scheduleData', { keyPath: ['giorno', 'ora', 'nome'] });
+        // Specifica giorno e ora come chiavi primarie
+        console.log('4');
+    }
+
+    if (nome !==''){
+        // Gestisci l'evento di successo durante l'apertura del database
+        request.onsuccess = function(event) {
+            const db = event.target.result;
+            console.log('5');
+            // Crea una transazione di lettura/scrittura
+            const transaction = db.transaction(['scheduleData'], 'readwrite');
+            console.log('6');
+            // Ottieni l'object store
+            const objectStore = transaction.objectStore('scheduleData');
+            
+            // Aggiungi i dati all'object store
+            const putRequest = objectStore.put(data);
+            
+            // Gestisci l'evento di successo dell'aggiunta dei dati
+            addRequest.onsuccess = function(event) {
+                console.log('Dati aggiunti con successo al database.');
+            };
+            
+            // Gestisci l'evento di errore dell'aggiunta dei dati
+            addRequest.onerror = function(event) {
+                console.error('Errore durante l\'aggiunta dei dati al database:', event.target.error);
+            };
         };
-        
-        // Gestisci l'evento di errore dell'aggiunta dei dati
-        addRequest.onerror = function(event) {
-            console.error('Errore durante l\'aggiunta dei dati al database:', event.target.error);
-        };
-    };
-    
+    }
     // Gestisci l'evento di errore durante l'apertura del database
     request.onerror = function(event) {
         console.error('Errore durante l\'apertura del database:', event.target.error);
