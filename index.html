@@ -216,6 +216,11 @@ function loadTableDataFromLocalStorage() {
         const tableData = JSON.parse(tableDataJSON);
         const table = document.getElementById('schedule');
 
+        // Rimuovi eventuali tabelle esistenti
+        while (table.rows.length > 0) {
+            table.deleteRow(0);
+        }
+
         // Popola la tabella con i dati salvati
         for (let i = 0; i < tableData.length; i++) {
             const row = table.insertRow();
@@ -226,6 +231,7 @@ function loadTableDataFromLocalStorage() {
         }
     }
 }
+
 
 // Chiamata alla funzione per caricare la tabella quando la pagina viene caricata
 window.addEventListener('load', function() {
