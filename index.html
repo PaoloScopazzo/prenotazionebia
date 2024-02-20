@@ -49,7 +49,7 @@
 <body>
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
-    <h2>Prenotazione BIA 42</h2>
+    <h2>Prenotazione BIA 43</h2>
         <table id="schedule">
             <!-- Qui verranno visualizzati i giorni -->
         </table>
@@ -63,7 +63,8 @@ function handleKeyboardNavigation(event) {
     if (focusedCell.tagName === 'TD') {
         const currentRowIndex = focusedCell.parentElement.rowIndex;
         const currentCellIndex = focusedCell.cellIndex;
-        console.log('Dati:');
+        const cell = table.rows[currentRowIndex].cells[currentCellIndex]; // Ottieni la cella specifica
+        console.log('Dati:',cell.textContent);
         let nextCell;
         
         switch (event.key) {
