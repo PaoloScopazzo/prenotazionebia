@@ -35,7 +35,7 @@
     </style>
 </head>
 <body>
-    <h1>Prenotazione BIA 6</h1>
+    <h1>Prenotazione BIA 7</h1>
     <table id="spreadsheet-data">
         <!-- Qui verranno inseriti i dati del foglio di calcolo -->
     </table>
@@ -45,87 +45,36 @@
         // ID della tabella nel foglio di calcolo (di solito 0)
         const SHEET_ID = 0;
 
-function loadSpreadsheetData() {
-    gapi.client.sheets.spreadsheets.get({
-        spreadsheetId: SPREADSHEET_ID
-    }).then(response => {
-        const sheets = response.result.sheets;
-        sheets.forEach(sheet => {
-            const table = document.createElement('table');
-            table.innerHTML = `<caption>${sheet.properties.title}</caption>`;
-            const sheetId = sheet.properties.sheetId;
+        // Funzione per caricare i dati del foglio di calcolo
+        function loadSpreadsheetData() {
             gapi.client.sheets.spreadsheets.get({
                 spreadsheetId: SPREADSHEET_ID,
-                ranges: [`${sheet.properties.title}!A1:Z100`],
-                fields: 'sheets(properties,sheetId,data.rowData.values.userEnteredFormat.backgroundColor)',
+                ranges: 'FEBBRAIO'
             }).then(response => {
-                const sheetData = response.result.sheets.find(sheet => sheet.properties.sheetId === sheetId);
+                const sheetData = response.result.sheets.find(sheet => sheet.properties.title === 'FEBBRAIO');
+                const table = document.getElementById('spreadsheet-data');
+                table.innerHTML = '';
+
                 if (sheetData && sheetData.data && sheetData.data.length > 0) {
                     const rowData = sheetData.data[0].rowData;
-                    rowData.forEach((row, rowIndex) => {
+                    rowData.forEach(row => {
                         const tr = document.createElement('tr');
-                        if (row.values) {
-                            row.values.forEach((cell, columnIndex) => {
-                                const td = document.createElement('td');
-                                td.textContent = cell.userEnteredValue ? cell.userEnteredValue.stringValue : '';
-                                td.contentEditable = true; // Permette la modifica del contenuto
-                                td.dataset.row = rowIndex;
-                                td.dataset.column = columnIndex;
-                                if (cell.userEnteredFormat && cell.userEnteredFormat.backgroundColor) {
-                                    td.style.backgroundColor = cell.userEnteredFormat.backgroundColor;
-                                }
-                                td.addEventListener('blur', function() {
-                                    const row = parseInt(this.dataset.row);
-                                    const column = parseInt(this.dataset.column);
-                                    const newValue = this.textContent;
-                                    updateCellValue(row, column, newValue);
-                                });
-                                tr.appendChild(td);
-                            });
-                        }
+                        row.values.forEach(cell => {
+                            const td = document.createElement('td');
+                            td.textContent = cell && cell.userEnteredValue ? cell.userEnteredValue.stringValue : '';
+                            td.contentEditable = true;
+                            if (cell && cell.userEnteredFormat && cell.userEnteredFormat.backgroundColor) {
+                                td.style.backgroundColor = cell.userEnteredFormat.backgroundColor;
+                            }
+                            tr.appendChild(td);
+                        });
                         table.appendChild(tr);
                     });
                 } else {
                     console.log('Nessun dato trovato.');
                 }
-                document.body.appendChild(table);
             }, error => {
                 console.error('Errore nel caricamento dei dati del foglio di calcolo:', error.result.error.message);
-            });
-        });
-    }, error => {
-        console.error('Errore nel caricamento del foglio di calcolo:', error.result.error.message);
-    });
-}
-
-
-
-        
-// Funzione per aggiornare il valore di una cella nel foglio di calcolo
-        function updateCellValue(row, column, newValue) {
-            gapi.client.sheets.spreadsheets.values.update({
-                spreadsheetId: SPREADSHEET_ID,
-                range: 'FEBBRAIO!' + String.fromCharCode(65 + column) + (row + 1), // Converti la coordinata della cella in formato A1
-                valueInputOption: 'RAW',
-                resource: { values: [[newValue]] }
-            }).then(response => {
-                console.log('Cella aggiornata con successo.');
-            }, error => {
-                console.error('Errore nell\'aggiornamento della cella:', error.result.error.message);
-            });
-        }
-         // Funzione per aggiornare il foglio di calcolo con i valori modificati nella tabella
-        function updateSpreadsheet() {
-            const table = document.getElementById('spreadsheet-data');
-            const cells = table.querySelectorAll('td');
-
-            cells.forEach(cell => {
-                cell.addEventListener('blur', () => {
-                    const row = parseInt(cell.dataset.row);
-                    const column = parseInt(cell.dataset.column);
-                    const newValue = cell.textContent;
-                    updateCellValue(row, column, newValue);
-                });
             });
         }
 
@@ -144,7 +93,5 @@ function loadSpreadsheetData() {
         // Carica il client dell'API di Google Sheets
         gapi.load('client', initClient);
     </script>
-
-    
 </body>
 </html>
