@@ -50,64 +50,10 @@
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
     <h2>Prenotazione BIA 33</h2>
-        <button id="saveButton">Salva</button>
         <table id="schedule">
             <!-- Qui verranno visualizzati i giorni -->
         </table>
     <script>
-        
-    // Funzione per salvare i dati della tabella in SQLite
-        function saveDataToSQLite() {
-            // Ottieni tutti i dati dalla tabella
-            const table = document.getElementById('schedule');
-            const rows = table.rows;
-
-            // Inizializza una transazione SQLite
-            const transaction = db.transaction(['scheduleData'], 'readwrite');
-            const objectStore = transaction.objectStore('scheduleData');
-
-            // Cicla su ogni riga della tabella (escludendo la prima riga con le intestazioni)
-            for (let i = 1; i < rows.length; i++) {
-                const row = rows[i];
-                const cells = row.cells;
-
-                // Cicla su ogni cella della riga (escludendo la prima cella con l'orario)
-                for (let j = 1; j < cells.length; j++) {
-                    const cell = cells[j];
-
-                    // Ottieni la data e l'ora corrispondente alla cella
-                    const currentDate = new Date();
-                    const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + i - 1, currentDate.getDate() + j - 1);
-
-                    // Ottieni il testo dalla cella
-                    const cellText = cell.textContent.trim();
-
-                    // Crea un oggetto per memorizzare i dati
-                    const data = {
-                        datetime: selectedDate,
-                        value: cellText
-                    };
-
-                    // Aggiungi l'oggetto all'object store SQLite
-                    const request = objectStore.add(data);
-
-                    // Gestisci gli errori in caso di problemi con l'aggiunta dei dati
-                    request.onerror = function(event) {
-                        console.error('Errore durante il salvataggio dei dati:', event.target.error);
-                    };
-
-                    // Logga un messaggio di successo quando i dati vengono aggiunti correttamente
-                    request.onsuccess = function(event) {
-                        console.log('Dati salvati con successo:', event.target.result);
-                    };
-                }
-            }
-
-            // Completamento della transazione
-            transaction.oncomplete = function() {
-                console.log('Transazione completata');
-            };
-        }
         
 // Funzione per gestire la navigazione tra le celle della tabella utilizzando le frecce della tastiera
 function handleKeyboardNavigation(event) {
