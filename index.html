@@ -43,7 +43,7 @@
         .non-empty {
             background-color: #db7093; /* Colora il contenuto non vuoto */
         }
-        .emptydddd{
+        .empty{
             background-color: #8fbc8f; /* Colora il contenuto vuoto */
         }
         .highlighted {
@@ -63,23 +63,12 @@
 <body>
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
-    <h2>Prenotazione BIA 25</h2>
+    <h2>Prenotazione BIA 26</h2>
     <table id="schedule">
         <!-- Qui verrà generata la tabella degli orari e dei giorni -->
     </table>
-    <table id="spreadsheet-data">
-        <!-- Qui verranno inseriti i dati del foglio di calcolo -->
-    </table>
     <script>
-        
-// Aggiungi un gestore eventi per l'input alle celle della tabella
-const cells = document.querySelectorAll('#schedule td');
-cells.forEach(cell => {
-    cell.addEventListener('input', function() {
-        highlightRowAndColumn(this);
-    });
-});
-        
+                
 // Funzione per gestire la navigazione tra le celle della tabella utilizzando le frecce della tastiera
 function handleKeyboardNavigation(event) {
     const table = document.getElementById('schedule');
@@ -126,7 +115,7 @@ function loadScheduleTable() {
     
     // Calcola la data di inizio e fine per il range di due mesi
     const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 2, 0);
+    const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 3, 0);
 
     const days = getDaysInRange(startDate, endDate); // Ottieni i giorni da febbraio ad aprile
     const times = generateTimeSlots(); // Genera gli slot di tempo da 09:00 a 20:15 a intervalli di 15 minuti
