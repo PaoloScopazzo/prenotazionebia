@@ -11,7 +11,8 @@
         <!-- Qui verranno inseriti i dati del foglio di calcolo -->
     </table>
     <button onclick="updateSpreadsheet()">Aggiorna Foglio di Calcolo</button>
-
+<!-- Carica l'API di Google -->
+    <script src="https://apis.google.com/js/api.js"></script>
     <script>
         // ID del foglio di calcolo condiviso
         const SPREADSHEET_ID = '1f0LTsDeHUTE-pVmqgYqpwFVc1AFk94_0yGDKF4wnHsE';
@@ -83,7 +84,6 @@
         gapi.load('client', initClient);
     </script>
 
-    <!-- Carica l'API di Google -->
-    <script src="https://apis.google.com/js/api.js"></script>
+    
 </body>
 </html>
