@@ -107,9 +107,6 @@ function handleKeyboardNavigation(event) {
     }
 }
  
-// Aggiungi un gestore eventi per il keydown
-document.addEventListener('keydown', handleKeyboardNavigation);
-
 function getCellData(rowIndex, colIndex) {
     const table = document.getElementById('schedule'); // Ottieni la tabella
     const cell = table.rows[rowIndex].cells[colIndex]; // Ottieni la cella specifica
@@ -191,7 +188,58 @@ function getDaysInRange(startDate, endDate) {
 
 // Chiamata alla funzione per caricare la tabella degli orari e dei giorni
 loadScheduleTable();     
-     
+        
+function saveTableDataToLocalStorage() {
+    const table = document.getElementById('schedule');
+    const tableData = [];
+
+    // Itera sulle righe della tabella
+    for (let i = 0; i < table.rows.length; i++) {
+        const rowData = [];
+
+        // Itera sulle celle della riga corrente
+        for (let j = 0; j < table.rows[i].cells.length; j++) {
+            rowData.push(table.rows[i].cells[j].textContent);
+        }
+
+        tableData.push(rowData);
+    }
+
+    // Salva i dati della tabella nell'localStorage
+    localStorage.setItem('scheduleData', JSON.stringify(tableData));
+}
+
+function loadTableDataFromLocalStorage() {
+    const tableDataJSON = localStorage.getItem('scheduleData');
+
+    if (tableDataJSON) {
+        const tableData = JSON.parse(tableDataJSON);
+        const table = document.getElementById('schedule');
+
+        // Popola la tabella con i dati salvati
+        for (let i = 0; i < tableData.length; i++) {
+            const row = table.insertRow();
+            for (let j = 0; j < tableData[i].length; j++) {
+                const cell = row.insertCell();
+                cell.textContent = tableData[i][j];
+            }
+        }
+    }
+}
+
+// Chiamata alla funzione per caricare la tabella quando la pagina viene caricata
+window.addEventListener('load', function() {
+    loadScheduleTable();
+    loadTableDataFromLocalStorage();
+});
+
+// Chiamata alla funzione per salvare i dati della tabella quando la pagina viene scaricata
+window.addEventListener('beforeunload', function() {
+    saveTableDataToLocalStorage();
+});
+
+// Chiamata alla funzione per gestire la navigazione tra le celle della tabella
+document.addEventListener('keydown', handleKeyboardNavigation); 
 </script>
 
 </body>
