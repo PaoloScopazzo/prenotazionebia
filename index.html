@@ -49,7 +49,7 @@
 <body>
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
-    <h2>Prenotazione BIA 54</h2>
+    <h2>Prenotazione BIA 55</h2>
         <table id="schedule">
             <!-- Qui verranno visualizzati i giorni -->
         </table>
@@ -67,23 +67,35 @@ function handleKeyboardNavigation(event) {
         const giorno = getCellData(0,currentCellIndex); // Ottieni la cella specifica
         const ora = getCellData(currentRowIndex,0); // Ottieni la cella specifica
         
-        console.log('Dati:',cell,giorno,ora);
-        if (cell !== '') { // Check valore
-            saveDataToDatabase(giorno, ora, cell);
-        }
         let nextCell;
         
         switch (event.key) {
             case 'ArrowUp':
+                console.log('Dati:',cell,giorno,ora);
+                if (cell !== '') { // Check valore
+                    saveDataToDatabase(giorno, ora, cell);
+                }
                 nextCell = table.rows[currentRowIndex - 1]?.cells[currentCellIndex];
                 break;
             case 'ArrowDown':
+                console.log('Dati:',cell,giorno,ora);
+                if (cell !== '') { // Check valore
+                    saveDataToDatabase(giorno, ora, cell);
+                }
                 nextCell = table.rows[currentRowIndex + 1]?.cells[currentCellIndex];
                 break;
             case 'ArrowLeft':
                 nextCell = focusedCell.previousElementSibling;
+                console.log('Dati:',cell,giorno,ora);
+                if (cell !== '') { // Check valore
+                    saveDataToDatabase(giorno, ora, cell);
+                }
                 break;
             case 'ArrowRight':
+                console.log('Dati:',cell,giorno,ora);
+                if (cell !== '') { // Check valore
+                    saveDataToDatabase(giorno, ora, cell);
+                }
                 nextCell = focusedCell.nextElementSibling;
                 break;
         }
