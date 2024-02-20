@@ -45,11 +45,73 @@
 </head>
 <body>
     <img id="logo" src="logo.png" alt="Logo">
-    <h1>Prenotazione BIA 8</h1>
+    <h1>Prenotazione BIA 9</h1>
     <table id="spreadsheet-data">
         <!-- Qui verranno inseriti i dati del foglio di calcolo -->
     </table>
     <script>
+
+// Funzione per caricare la tabella degli orari e dei giorni
+function loadScheduleTable() {
+    const table = document.getElementById('schedule');
+    table.innerHTML = ''; // Pulisce la tabella
+
+    const days = getDaysInRange(new Date('2024-02-01'), new Date('2024-04-30')); // Ottieni i giorni da febbraio ad aprile
+    const times = generateTimeSlots(); // Genera gli slot di tempo da 09:00 a 20:15 a intervalli di 15 minuti
+
+    // Crea l'intestazione delle colonne con i giorni
+    const headerRow = document.createElement('tr');
+    const emptyHeaderCell = document.createElement('th');
+    headerRow.appendChild(emptyHeaderCell); // Cella vuota per l'angolo in alto a sinistra
+    days.forEach(day => {
+        const dayCell = document.createElement('th');
+        dayCell.textContent = day.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' }); // Visualizza solo il giorno e il mese
+        headerRow.appendChild(dayCell);
+    });
+    table.appendChild(headerRow);
+
+    // Crea le righe con gli orari
+    times.forEach(time => {
+        const row = document.createElement('tr');
+        const timeCell = document.createElement('td');
+        timeCell.textContent = time;
+        row.appendChild(timeCell); // Aggiungi l'orario nella prima colonna
+        days.forEach(() => {
+            const timeSlotCell = document.createElement('td');
+            // Puoi aggiungere ulteriori personalizzazioni qui, ad esempio input per gli appuntamenti
+            row.appendChild(timeSlotCell);
+        });
+        table.appendChild(row);
+    });
+}
+
+// Funzione per generare gli slot di tempo da 09:00 a 20:15 a intervalli di 15 minuti
+function generateTimeSlots() {
+    const times = [];
+    let current = new Date('2024-01-01T09:00:00');
+    const end = new Date('2024-01-01T20:15:00');
+    while (current <= end) {
+        times.push(current.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }));
+        current = new Date(current.getTime() + 15 * 60000); // Aggiungi 15 minuti
+    }
+    return times;
+}
+
+// Funzione per ottenere i giorni in un intervallo di date
+function getDaysInRange(startDate, endDate) {
+    const days = [];
+    let currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+        days.push(new Date(currentDate));
+        currentDate.setDate(currentDate.getDate() + 1); // Incrementa di un giorno
+    }
+    return days;
+}
+
+// Chiamata alla funzione per caricare la tabella degli orari e dei giorni
+loadScheduleTable();
+
+        
         // ID del foglio di calcolo condiviso
         const SPREADSHEET_ID = '1f0LTsDeHUTE-pVmqgYqpwFVc1AFk94_0yGDKF4wnHsE';
         // ID della tabella nel foglio di calcolo (di solito 0)
