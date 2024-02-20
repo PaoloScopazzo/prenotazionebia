@@ -54,26 +54,7 @@
             <!-- Qui verranno visualizzati i giorni -->
         </table>
     <script>
-    // Aggiungi un evento click alle celle della tabella
-    const cells = document.querySelectorAll('#schedule td');
-    cells.forEach(cell => {
-        cell.addEventListener('click', function() {
-            // Ottieni l'indice della riga e della colonna della cella selezionata
-            const rowIndex = this.parentElement.rowIndex;
-            const colIndex = this.cellIndex;
-
-            // Ottieni la data e l'ora corrispondente alla riga e alla colonna della cella selezionata
-            const currentDate = new Date();
-            const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + rowIndex, currentDate.getDate() + colIndex);
-
-            // Formatta la data e l'ora
-            const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
-            const dateString = selectedDate.toLocaleDateString('it-IT', options);
-
-            // Imposta il valore della cella con la data e l'ora formattate
-            this.textContent = dateString;
-        });
-    });
+    
 // Funzione per gestire la navigazione tra le celle della tabella utilizzando le frecce della tastiera
 function handleKeyboardNavigation(event) {
     const table = document.getElementById('schedule');
@@ -184,7 +165,26 @@ function getDaysInRange(startDate, endDate) {
 
 // Chiamata alla funzione per caricare la tabella degli orari e dei giorni
 loadScheduleTable();
+// Aggiungi un evento click alle celle della tabella
+    const cells = document.querySelectorAll('#schedule td');
+    cells.forEach(cell => {
+        cell.addEventListener('click', function() {
+            // Ottieni l'indice della riga e della colonna della cella selezionata
+            const rowIndex = this.parentElement.rowIndex;
+            const colIndex = this.cellIndex;
 
+            // Ottieni la data e l'ora corrispondente alla riga e alla colonna della cella selezionata
+            const currentDate = new Date();
+            const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + rowIndex, currentDate.getDate() + colIndex);
+
+            // Formatta la data e l'ora
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
+            const dateString = selectedDate.toLocaleDateString('it-IT', options);
+
+            // Imposta il valore della cella con la data e l'ora formattate
+            this.textContent = dateString;
+        });
+    });
 </script>    
 </body>
 </html>
