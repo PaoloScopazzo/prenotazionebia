@@ -58,10 +58,11 @@
             break;
     }
 
-console.log("Il mese corrente è: " + pagina);
-function handleClientLoad() {
-    gapi.load('client:auth2', initClient);
-}
+    console.log("Il mese corrente è: " + pagina);
+            
+    // Apri i fogli
+    var targetSpreadsheet = SpreadsheetApp.openById('1f0LTsDeHUTE-pVmqgYqpwFVc1AFk94_0yGDKF4wnHsE');
+    var sourceSheet = sourceSpreadsheet.getSheetByName(pagina);
 
     </script>
     
