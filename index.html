@@ -81,6 +81,52 @@
     
     console.log("Il numero del mese corrente è: " + numeroMese);
 
+    var pagina;
+        
+    switch (numeroMese) {
+        case 0:
+        pagina="GENNAIO";
+            break;
+        case 1:
+        pagina="FEBBRAIO";
+            break;
+        case 2:
+        pagina="MARZO";
+            break;
+        case 3:
+        pagina="APRILE";
+            break;
+        case 4:
+        pagina="MAGGIO";
+            break;
+        case 5:
+        pagina="GIUGNO";
+            break;
+        case 6:
+        pagina="LUGLIO";
+            break;
+        case 7:
+        pagina="AGOSTO";
+            break;
+        case 8:
+        pagina="SETTEMBRE";
+            break;
+        case 9:
+        pagina="OTTOBRE";
+            break;
+        case 10:
+        pagina="NOVEMBRE";
+            break;
+        case 11:
+            pagina="DICEMBRE";
+            break;
+        default:
+            console.log("Opzione non valida");
+            break;
+    }
+
+console.log("Il mese corrente è: " + pagina);
+        
 // Funzione per gestire la navigazione tra le celle della tabella utilizzando le frecce della tastiera
 function handleKeyboardNavigation(event) {
     const table = document.getElementById('schedule');
