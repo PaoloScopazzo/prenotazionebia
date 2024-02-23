@@ -336,7 +336,7 @@
         headerRow.appendChild(emptyHeaderCell); // Cella vuota per l'angolo in alto a sinistra
         days.forEach(day => {
             const dayCell = document.createElement('th');
-            dayCell.textContent = day.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' }); // Visualizza solo il giorno e il mese
+            dayCell.textContent = day.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: '4-digit' }); 
             headerRow.appendChild(dayCell);
         });
         table.appendChild(headerRow);
