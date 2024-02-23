@@ -59,7 +59,7 @@
                 break;
         }
     
-        console.log("Il mese corrente è: " + pagina);
+      console.log("Il mese corrente è: " + pagina);
       /* exported gapiLoaded */
       /* exported gisLoaded */
       /* exported handleAuthClick */
@@ -83,17 +83,10 @@
       document.getElementById('authorize_button').style.visibility = 'hidden';
       document.getElementById('signout_button').style.visibility = 'hidden';
 
-      /**
-       * Callback after api.js is loaded.
-       */
       function gapiLoaded() {
         gapi.load('client', initializeGapiClient);
       }
 
-      /**
-       * Callback after the API client is loaded. Loads the
-       * discovery doc to initialize the API.
-       */
       async function initializeGapiClient() {
         await gapi.client.init({
           apiKey: API_KEY,
@@ -103,9 +96,6 @@
         maybeEnableButtons();
       }
 
-      /**
-       * Callback after Google Identity Services are loaded.
-       */
       function gisLoaded() {
         tokenClient = google.accounts.oauth2.initTokenClient({
           client_id: CLIENT_ID,
@@ -116,18 +106,12 @@
         maybeEnableButtons();
       }
 
-      /**
-       * Enables user interaction after all libraries are loaded.
-       */
       function maybeEnableButtons() {
         if (gapiInited && gisInited) {
           document.getElementById('authorize_button').style.visibility = 'visible';
         }
       }
 
-      /**
-       *  Sign in the user upon button click.
-       */
       function handleAuthClick() {
         tokenClient.callback = async (resp) => {
           if (resp.error !== undefined) {
@@ -148,9 +132,6 @@
         }
       }
 
-      /**
-       *  Sign out the user upon button click.
-       */
       function handleSignoutClick() {
         const token = gapi.client.getToken();
         if (token !== null) {
@@ -188,18 +169,14 @@
                 matrice[i][j] = row[j];
             }
         }
-          // Mostra il contenuto ordinato nel tuo elemento 'content'
-        // document.getElementById('content').innerText = output;
-          // Ottieni il riferimento alla tabella
+          
         var table = document.getElementById("schedule");
 
-        // Cicla attraverso la matrice e popola la tabella
-        for (var i = 0; i < matrice.length; i++) {
+        for (let i = 0; i < matrice.length; i++) {
             // Crea una nuova riga nella tabella
             var row = table.insertRow();
 
-            for (var j = 0; j < matrice[i].length; j++) {
-                // Crea una nuova cella nella riga e aggiungi il valore della matrice
+            for (let j = 0; j < matrice[i].length; j++) {
                 var cell = row.insertCell();
                 cell.innerText = matrice[i][j];
             }
@@ -271,254 +248,75 @@
     !--Add buttons to initiate auth sequence and sign out-->
     <button id="authorize_button" onclick="handleAuthClick()">Authorize</button>
     <button id="signout_button" onclick="handleSignoutClick()">Sign Out</button>
-
     <pre id="content" style="white-space: pre-wrap;"></pre>
-    
     <img id="logo" src="logo.png" alt="Logo">
     <h1>Sede di Castagnito</h1>
     <h2>Prenotazione BIA</h2>
     <button id="exportButton">Esporta CSV</button>
-    <table id="schedule">
-        <!-- Qui verranno visualizzati i giorni -->
-    </table>
+    <table id="schedule"></table>
     <script>
     
-// Funzione per gestire la navigazione tra le celle della tabella utilizzando le frecce della tastiera
-function handleKeyboardNavigation(event) {
-    const table = document.getElementById('schedule');
-    const focusedCell = document.activeElement;
-    
-    if (focusedCell.tagName === 'TD') {
-        const currentRowIndex = focusedCell.parentElement.rowIndex;
-        const currentCellIndex = focusedCell.cellIndex;
-        const cell = getCellData(currentRowIndex,currentCellIndex); // Ottieni la cella specifica
-        const giorno = getCellData(0,currentCellIndex); // Ottieni la cella specifica
-        const ora = getCellData(currentRowIndex,0); // Ottieni la cella specifica
-        
-        let nextCell;
-        
-        switch (event.key) {
-            case 'ArrowUp':
-                console.log('Dati:',cell,giorno,ora);
-                if (cell !== '') { // Check valore
-                    //saveTableDataToLocalStorage();
-                }
-                nextCell = table.rows[currentRowIndex - 1]?.cells[currentCellIndex];
-                break;
-            case 'ArrowDown':
-                console.log('Dati:',cell,giorno,ora);
-                if (cell !== '') { // Check valore
-                    //saveTableDataToLocalStorage();
-                }
-                nextCell = table.rows[currentRowIndex + 1]?.cells[currentCellIndex];
-                break;
-            case 'ArrowLeft':
-                nextCell = focusedCell.previousElementSibling;
-                console.log('Dati:',cell,giorno,ora);
-                if (cell !== '') { // Check valore
-                    //saveTableDataToLocalStorage();
-                }
-                break;
-            case 'ArrowRight':
-                console.log('Dati:',cell,giorno,ora);
-                if (cell !== '') { // Check valore
-                    //saveTableDataToLocalStorage();
-                }
-                nextCell = focusedCell.nextElementSibling;
-                break;
-        }
-        
-        if (nextCell) {
-            nextCell.focus();
-            event.preventDefault(); // Evita il comportamento predefinito della tastiera
-        }
-    }
-}
-
-function getCellData(rowIndex, colIndex) {
-    const table = document.getElementById('schedule'); // Ottieni la tabella
-    const cell = table.rows[rowIndex].cells[colIndex]; // Ottieni la cella specifica
-    const cellData = cell.textContent.trim(); // Ottieni il contenuto della cella (rimuovendo gli spazi bianchi)
-    return cellData;
-}
-/*
-// Funzione per caricare la tabella degli orari e dei giorni
-function loadScheduleTable() {
-    const table = document.getElementById('schedule');
-    table.innerHTML = ''; // Pulisce la tabella
-
-    // Ottieni la data corrente
-    const currentDate = new Date();
-    
-    // Calcola la data di inizio e fine per il range di due mesi
-    const startDate = new Date(currentDate);
-    const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 3, 0);
-
-    const days = getDaysInRange(startDate, endDate); // Ottieni i giorni da febbraio ad aprile
-    const times = generateTimeSlots(); // Genera gli slot di tempo da 09:00 a 20:15 a intervalli di 15 minuti
-
-    // Crea l'intestazione delle colonne con i giorni
-    const headerRow = document.createElement('tr');
-    const emptyHeaderCell = document.createElement('th');
-    headerRow.appendChild(emptyHeaderCell); // Cella vuota per l'angolo in alto a sinistra
-    days.forEach(day => {
-        const dayCell = document.createElement('th');
-        dayCell.textContent = day.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' }); // Visualizza solo il giorno e il mese
-        headerRow.appendChild(dayCell);
-    });
-    table.appendChild(headerRow);
-
-    // Crea le righe con gli orari
-    times.forEach(time => {
-        const row = document.createElement('tr');
-        const timeCell = document.createElement('td');
-        timeCell.textContent = time;
-        row.appendChild(timeCell); // Aggiungi l'orario nella prima colonna
-        days.forEach(() => {
-            const timeSlotCell = document.createElement('td');
-            timeSlotCell.contentEditable = true; // Imposta la cella come editabile
-            timeSlotCell.addEventListener('input', function() {
-                if (this.textContent.trim() === '') {
-                    this.style.backgroundColor = 'white'; // Imposta lo sfondo verde se la cella è vuota
-                } else {
-                    this.style.backgroundColor = '#f29400'; // Altrimenti, imposta lo sfondo rosso
-                }
-            });
-            // Puoi aggiungere ulteriori personalizzazioni qui, ad esempio input per gli appuntamenti
-            row.appendChild(timeSlotCell);
-        });
-        table.appendChild(row);
-    });
-}
-
-// Funzione per generare gli slot di tempo da 09:00 a 20:15 a intervalli di 15 minuti
-function generateTimeSlots() {
-    const times = [];
-    let current = new Date('2024-01-01T09:00:00');
-    const end = new Date('2024-01-01T20:15:00');
-    while (current <= end) {
-        times.push(current.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }));
-        current = new Date(current.getTime() + 15 * 60000); // Aggiungi 15 minuti
-    }
-    return times;
-}
-
-// Funzione per ottenere i giorni in un intervallo di date
-function getDaysInRange(startDate, endDate) {
-    const days = [];
-    let currentDate = new Date(startDate);
-    while (currentDate <= endDate) {
-        days.push(new Date(currentDate));
-        currentDate.setDate(currentDate.getDate() + 1); // Incrementa di un giorno
-    }
-    return days;
-}
-
-// Chiamata alla funzione per caricare la tabella degli orari e dei giorni
-loadScheduleTable();   
-*/
- /*
-function saveTableDataToLocalStorage() {
-    const table = document.getElementById('schedule');
-    const tableData = [];
-
-    // Itera sulle righe della tabella
-    for (let i = 0; i < table.rows.length; i++) {
-        const rowData = [];
-
-        // Itera sulle celle della riga corrente
-        for (let j = 0; j < table.rows[i].cells.length; j++) {
-            rowData.push(table.rows[i].cells[j].textContent);
-        }
-
-        tableData.push(rowData);
-    }
-
-    // Salva i dati della tabella nell'localStorage
-    localStorage.setItem('scheduleData', JSON.stringify(tableData));
-}
-
-// Funzione per caricare i dati della tabella dall'LocalStorage
-function loadTableDataFromLocalStorage() {
-    const tableDataJSON = localStorage.getItem('scheduleData');
-
-    if (tableDataJSON) {
-        const tableData = JSON.parse(tableDataJSON);
+    function handleKeyboardNavigation(event) {
         const table = document.getElementById('schedule');
-
-        for (let i = 0; i < tableData.length; i++) {
-            for (let j = 0; j < tableData[i].length; j++) {
-                const cell = table.rows[i].cells[j];
-                cell.textContent = tableData[i][j];
-                if (cell.textContent.trim() === '') {
-                        cell.classList.remove('non-empty');
-                        cell.classList.add('empty');
-                    } else {
-                        cell.classList.remove('empty');
-                        cell.classList.add('non-empty');
+        const focusedCell = document.activeElement;
+    
+        if (focusedCell.tagName === 'TD') {
+            const currentRowIndex = focusedCell.parentElement.rowIndex;
+            const currentCellIndex = focusedCell.cellIndex;
+            const cell = getCellData(currentRowIndex,currentCellIndex); // Ottieni la cella specifica
+            const giorno = getCellData(0,currentCellIndex); // Ottieni la cella specifica
+            const ora = getCellData(currentRowIndex,0); // Ottieni la cella specifica
+            
+            let nextCell;
+            
+            switch (event.key) {
+                case 'ArrowUp':
+                    console.log('Dati:',cell,giorno,ora);
+                    if (cell !== '') { // Check valore
+                        //saveTableDataToLocalStorage();
                     }
+                    nextCell = table.rows[currentRowIndex - 1]?.cells[currentCellIndex];
+                    break;
+                case 'ArrowDown':
+                    console.log('Dati:',cell,giorno,ora);
+                    if (cell !== '') { // Check valore
+                        //saveTableDataToLocalStorage();
+                    }
+                    nextCell = table.rows[currentRowIndex + 1]?.cells[currentCellIndex];
+                    break;
+                case 'ArrowLeft':
+                    nextCell = focusedCell.previousElementSibling;
+                    console.log('Dati:',cell,giorno,ora);
+                    if (cell !== '') { // Check valore
+                        //saveTableDataToLocalStorage();
+                    }
+                    break;
+                case 'ArrowRight':
+                    console.log('Dati:',cell,giorno,ora);
+                    if (cell !== '') { // Check valore
+                        //saveTableDataToLocalStorage();
+                    }
+                    nextCell = focusedCell.nextElementSibling;
+                    break;
             }
+            
+            if (nextCell) {
+                nextCell.focus();
+                event.preventDefault(); // Evita il comportamento predefinito della tastiera
+            }
+            
         }
     }
-}
-*/
-
-
-
-// Funzione per gestire il click sul pulsante di esportazione CSV
-document.getElementById('exportButton').addEventListener('click', function() {
-    exportTableToCSV('schedule.csv');
-});
-
-// Funzione per esportare i dati della tabella in un file CSV
-function exportTableToCSV(filename) {
-    const table = document.getElementById('schedule');
-    const rows = table.rows;
-    let csvContent = '';
-
-    // Aggiungi intestazione al file CSV
-    csvContent += 'giorno;ora;nome\n';
-
-    // Itera attraverso le righe della tabella e aggiungi i dati al CSV
-    for (let i = 1; i < rows.length; i++) {
-        const cells = rows[i].cells;
-        const giorno = cells[0].textContent;
-        for (let j = 1; j < cells.length; j++) {
-            const ora = table.rows[0].cells[j].textContent;
-            const nome = cells[j].textContent;
-            csvContent += `${giorno};${ora};${nome}\n`;
-        }
+    
+    function getCellData(rowIndex, colIndex) {
+        const table = document.getElementById('schedule'); // Ottieni la tabella
+        const cell = table.rows[rowIndex].cells[colIndex]; // Ottieni la cella specifica
+        const cellData = cell.textContent.trim(); // Ottieni il contenuto della cella (rimuovendo gli spazi bianchi)
+        return cellData;
     }
 
-    // Crea un oggetto Blob contenente i dati CSV
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-    // Crea un URL oggetto per il blob e crea un link per il download
-    const link = document.createElement('a');
-    if (link.download !== undefined) {
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', filename);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-}
-
-// Chiamata alla funzione per caricare la tabella quando la pagina viene caricata
-window.addEventListener('load', function() {
-    loadScheduleTable();
-    //loadTableDataFromLocalStorage();
-});
-
-// Chiamata alla funzione per salvare i dati della tabella quando la pagina viene scaricata
-window.addEventListener('beforeunload', function() {
-    //saveTableDataToLocalStorage();
-});
-
-// Chiamata alla funzione per gestire la navigazione tra le celle della tabella
-document.addEventListener('keydown', handleKeyboardNavigation); 
+    // Chiamata alla funzione per gestire la navigazione tra le celle della tabella
+    document.addEventListener('keydown', handleKeyboardNavigation); 
 </script>
 
 </body>
