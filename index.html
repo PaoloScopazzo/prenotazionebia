@@ -73,7 +73,14 @@
         <!-- Qui verranno visualizzati i giorni -->
     </table>
     <script>
-        
+    // Ottieni la data corrente
+    var dataCorrente = new Date();
+    
+    // Ottieni il numero del mese (0-11)
+    var numeroMese = dataCorrente.getMonth() + 1; // Aggiungi 1 perché i mesi sono indicizzati da 0 a 11
+    
+    console.log("Il numero del mese corrente è: " + numeroMese);
+
 // Funzione per gestire la navigazione tra le celle della tabella utilizzando le frecce della tastiera
 function handleKeyboardNavigation(event) {
     const table = document.getElementById('schedule');
