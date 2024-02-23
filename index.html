@@ -158,7 +158,16 @@
         const range = response.result;
         const values = range.values;
           
-        let matrice[][];
+        const matrice = [];
+        const rows = 120;
+        const columns = 40;
+        
+        for (let i = 0; i < rows; i++) {
+          matrice[i] = [];
+          for (let j = 0; j < columns; j++) {
+            my2DArray[i][j] = '';
+          }
+        }
 
         // Cicla attraverso le righe
         for (let i = 0; i < values.length; i++) {
