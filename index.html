@@ -181,15 +181,21 @@
         
             for (let i = 0; i < matrice.length; i++) {
                 for (let j = 0; j < matrice[i].length; j++) {
-                    for (let x = 0; x < table.rows.length; x++) {
-                        for (let y = 0; y < table.rows[0].cells.length; y++) {
-                            var ora = table.rows[x].cells[0].textContent;
-                            var giorno = table.rows[0].cells[y].textContent;
-                            if (matrice[i][0] == ora && matrice[0][j] == giorno) {
-                                table.rows[x].cells[y].textContent = matrice[i][j];
+                    if (matrice[i][j].lenght > 6)
+                        {
+                        for (let x = 0; x < table.rows.length; x++) 
+                            {
+                            for (let y = 0; y < table.rows[0].cells.length; y++) 
+                                {
+                                var ora = table.rows[x].cells[0].textContent;
+                                var giorno = table.rows[0].cells[y].textContent;
+                                if (matrice[i][0] == ora && matrice[0][j] == giorno) 
+                                    {
+                                    table.rows[x].cells[y].textContent = matrice[i][j-1];
+                                    }
                             }
                         }
-                    }
+                    }//Chiude if
                 }
             }
         }
