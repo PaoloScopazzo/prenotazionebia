@@ -135,7 +135,7 @@
           }
           document.getElementById('signout_button').style.visibility = 'visible';
           document.getElementById('authorize_button').innerText = 'Refresh';
-          await listMajors();
+          await CaricaDati();
         };
 
         if (gapi.client.getToken() === null) {
@@ -162,10 +162,10 @@
         }
       }
 
-      async function listMajors() {
+      async function CaricaDati() {
         let response;
         try {
-          // Fetch first 10 files
+
           response = await gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: '1f0LTsDeHUTE-pVmqgYqpwFVc1AFk94_0yGDKF4wnHsE',
             range: pagina + '!A1:Z120',
@@ -175,21 +175,18 @@
           return;
         }
         const range = response.result;
-        if (!range || !range.values || range.values.length == 0) {
-          document.getElementById('content').innerText = 'No values found.';
-          return;
-        }
         const values = range.values;
         let output = "";
-        
+          
+        String[][] matrice = new String[120][40];
+
         // Cicla attraverso le righe
         for (let i = 0; i < values.length; i++) {
             const row = values[i];
             // Cicla attraverso le colonne
             for (let j = 0; j < row.length; j++) {
-                output += row[j] + "\t"; // Aggiunge il valore alla stringa di output, separando con una tabulazione
+                matrice[i][j] = row[j];
             }
-            output += "\n"; // Vai alla prossima riga
         }
           // Mostra il contenuto ordinato nel tuo elemento 'content'
             document.getElementById('content').innerText = output;
@@ -323,7 +320,7 @@ function handleKeyboardNavigation(event) {
         }
     }
 }
- 
+
 function getCellData(rowIndex, colIndex) {
     const table = document.getElementById('schedule'); // Ottieni la tabella
     const cell = table.rows[rowIndex].cells[colIndex]; // Ottieni la cella specifica
@@ -405,7 +402,7 @@ function getDaysInRange(startDate, endDate) {
 
 // Chiamata alla funzione per caricare la tabella degli orari e dei giorni
 loadScheduleTable();     
-        
+ /*
 function saveTableDataToLocalStorage() {
     const table = document.getElementById('schedule');
     const tableData = [];
@@ -449,7 +446,7 @@ function loadTableDataFromLocalStorage() {
         }
     }
 }
-
+*/
 
 
 
@@ -497,12 +494,12 @@ function exportTableToCSV(filename) {
 // Chiamata alla funzione per caricare la tabella quando la pagina viene caricata
 window.addEventListener('load', function() {
     loadScheduleTable();
-    loadTableDataFromLocalStorage();
+    //loadTableDataFromLocalStorage();
 });
 
 // Chiamata alla funzione per salvare i dati della tabella quando la pagina viene scaricata
 window.addEventListener('beforeunload', function() {
-    saveTableDataToLocalStorage();
+    //saveTableDataToLocalStorage();
 });
 
 // Chiamata alla funzione per gestire la navigazione tra le celle della tabella
