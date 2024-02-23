@@ -189,7 +189,21 @@
             }
         }
           // Mostra il contenuto ordinato nel tuo elemento 'content'
-            document.getElementById('content').innerText = output;
+        // document.getElementById('content').innerText = output;
+          // Ottieni il riferimento alla tabella
+        var table = document.getElementById("schedule");
+
+        // Cicla attraverso la matrice e popola la tabella
+        for (var i = 0; i < matrice.length; i++) {
+            // Crea una nuova riga nella tabella
+            var row = table.insertRow();
+
+            for (var j = 0; j < matrice[i].length; j++) {
+                // Crea una nuova cella nella riga e aggiungi il valore della matrice
+                var cell = row.insertCell();
+                cell.innerText = matrice[i][j];
+            }
+        }
       }
     </script>
     
@@ -327,7 +341,7 @@ function getCellData(rowIndex, colIndex) {
     const cellData = cell.textContent.trim(); // Ottieni il contenuto della cella (rimuovendo gli spazi bianchi)
     return cellData;
 }
-       
+/*
 // Funzione per caricare la tabella degli orari e dei giorni
 function loadScheduleTable() {
     const table = document.getElementById('schedule');
@@ -401,7 +415,8 @@ function getDaysInRange(startDate, endDate) {
 }
 
 // Chiamata alla funzione per caricare la tabella degli orari e dei giorni
-loadScheduleTable();     
+loadScheduleTable();   
+*/
  /*
 function saveTableDataToLocalStorage() {
     const table = document.getElementById('schedule');
