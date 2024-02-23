@@ -181,7 +181,19 @@
         }
         // Flatten to string to display
         const output = range.values;
-        document.getElementById('content').innerText = output;
+        //document.getElementById('content').innerText = output;
+
+        let output = "";
+        
+        // Cicla attraverso le righe
+        for (let i = 0; i < values.length; i++) {
+            const row = values[i];
+            // Cicla attraverso le colonne
+            for (let j = 0; j < row.length; j++) {
+                output += row[j] + "\t"; // Aggiunge il valore alla stringa di output, separando con una tabulazione
+            }
+            output += "\n"; // Vai alla prossima riga
+        }
       }
     </script>
     
