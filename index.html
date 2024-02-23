@@ -143,63 +143,58 @@
         }
       }
 
-      async function CaricaDati() {
-        let response;
-        try {
-
-          response = await gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: '1f0LTsDeHUTE-pVmqgYqpwFVc1AFk94_0yGDKF4wnHsE',
-            range: pagina + '!A1:Z120',
-          });
-        } catch (err) {
-          document.getElementById('content').innerText = err.message;
-          return;
-        }
-        const range = response.result;
-        const values = range.values;
-          
-        const matrice = [];
-        const rows = 120;
-        const columns = 40;
-        
-        for (let i = 0; i < rows; i++) {
-          matrice[i] = [];
-          for (let j = 0; j < columns; j++) {
-            matrice[i][j] = '';
-          }
-        }
-
-        // Cicla attraverso le righe
-        for (let i = 0; i < values.length; i++) {
-            const row = values[i];
-            // Cicla attraverso le colonne
-            for (let j = 0; j < row.length; j++) {
-                matrice[i][j] = row[j];
+    async function CaricaDati() {
+            let response;
+            try {
+                response = await gapi.client.sheets.spreadsheets.values.get({
+                    spreadsheetId: '1f0LTsDeHUTE-pVmqgYqpwFVc1AFk94_0yGDKF4wnHsE',
+                    range: pagina + '!A1:Z120',
+                });
+            } catch (err) {
+                document.getElementById('content').innerText = err.message;
+                return;
             }
-        }
-          
-        var table = document.getElementById("schedule");
-
-        for (let i = 0; i < matrice.length; i++) {
-            for (let j = 0; j < matrice[i].length; j++) {
-                
-                for (let x = 0; x < table.rows.length; x++) {
-                    for (let y = 0; y < table.rows[0].cells.length; y++) {
-                        
-                        var ora = table.rows[x].cells[0].textContent;
-                        var giorno = table.rows[0].cells[y].textContent;
-                        if (matrice[i][0] == ora && matrice[0][j] == ora)
-                        {
-                            table.rows[x].cells[y].textContent = matrice[i][j];
+            const range = response.result;
+            const values = range.values;
+        
+            const matrice = [];
+            const rows = 120;
+            const columns = 40;
+        
+            for (let i = 0; i < rows; i++) {
+                matrice[i] = [];
+                for (let j = 0; j < columns; j++) {
+                    matrice[i][j] = '';
+                }
+            }
+        
+            // Cicla attraverso le righe
+            for (let i = 0; i < values.length; i++) {
+                const row = values[i];
+                // Cicla attraverso le colonne
+                for (let j = 0; j < row.length; j++) {
+                    matrice[i][j] = row[j];
+                }
+            }
+        
+            var table = document.getElementById("schedule");
+        
+            for (let i = 0; i < matrice.length; i++) {
+                for (let j = 0; j < matrice[i].length; j++) {
+                    for (let x = 0; x < table.rows.length; x++) {
+                        for (let y = 0; y < table.rows[0].cells.length; y++) {
+                            var ora = table.rows[x].cells[0].textContent;
+                            var giorno = table.rows[0].cells[y].textContent;
+                            if (matrice[i][0] == ora && matrice[0][j] == giorno) {
+                                table.rows[x].cells[y].textContent = matrice[i][j];
+                            }
                         }
-                        
                     }
                 }
             }
-        });
-    }
-    }
-}
+        }
+        
+      
     </script>
     
     <style>
