@@ -76,21 +76,32 @@ console.log("Il mese corrente è: " + pagina);
         }
 
         function readGoogleSheet() {
-            gapi.client.sheets.spreadsheets.values.get({
+            gapi.client.sheets.spreadsheets.values.batchGet({
                 spreadsheetId: '1f0LTsDeHUTE-pVmqgYqpwFVc1AFk94_0yGDKF4wnHsE',
-                range: pagina + '!A1:B10' // Intervallo di celle da leggere
+                ranges: [pagina + '!A1:D10'] // Specifica il range di celle da leggere
             }).then(function(response) {
-                var range = response.result;
-                if (range.values.length > 0) {
-                    for (var i = 0; i < range.values.length; i++) {
-                        var row = range.values[i];
-                        console.log(row);
+                var result = response.result;
+                var ranges = result.valueRanges;
+        
+                if (ranges && ranges.length > 0) {
+                    for (var i = 0; i < ranges.length; i++) {
+                        var range = ranges[i];
+                        console.log('Valori nel range ' + range.range + ':');
+                        var values = range.values;
+                        if (values) {
+                            for (var j = 0; j < values.length; j++) {
+                                var row = values[j];
+                                console.log(row);
+                            }
+                        } else {
+                            console.log('Nessun dato trovato nel range ' + range.range);
+                        }
                     }
                 } else {
                     console.log('Nessun dato trovato.');
                 }
             }, function(response) {
-                console.log('Errore: ' + response.result.error.message);
+                console.log('Errore durante la lettura del foglio: ' + response.result.error.message);
             });
         }
 
