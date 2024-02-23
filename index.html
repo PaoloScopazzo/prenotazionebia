@@ -60,42 +60,32 @@
         }
     
         console.log("Il mese corrente è: " + pagina);
-                
-        function handleClientLoad() {
-            console.log("Init");
-            gapi.client.init({
-                apiKey: 'AIzaSyBkOe-zFT15kggPuwA6yFG5bL_Wcl29nT8',
-                discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
-                clientId: '555055515526-d3tun71hjkfs5dj807klh243sdqb3352.apps.googleusercontent.com',
-                scope: 'https://www.googleapis.com/auth/spreadsheets.readonly',
-            }).then(function () {
-                // Una volta autenticato, puoi chiamare la funzione per leggere il contenuto del foglio
-                console.log("Try Read");
-                readGoogleSheet();
-            });
-        }
-    
-        function readGoogleSheet() {
-            gapi.client.sheets.spreadsheets.values.get({
-                spreadsheetId: '1f0LTsDeHUTE-pVmqgYqpwFVc1AFk94_0yGDKF4wnHsE',
-                range: pagina + '!A1:F10' // Intervallo di celle da leggere
-            }).then(function(response) {
-                var range = response.result;
-                if (range.values.length > 0) {
-                    for (var i = 0; i < range.values.length; i++) {
-                        var row = range.values[i];
-                        console.log(row);
-                    }
-                } else {
-                    console.log('Nessun dato trovato.');
-                }
-            }, function(response) {
-                console.log('Errore: ' + response.result.error.message);
-            });
-        }
 
-        // Chiamare la funzione handleClientLoad all'apertura della pagina
-        window.onload = handleClientLoad;
+        function start() {
+          // 2. Initialize the JavaScript client library.
+          gapi.client.init({
+            'apiKey': 'AIzaSyBkOe-zFT15kggPuwA6yFG5bL_Wcl29nT8',
+            // Your API key will be automatically added to the Discovery Document URLs.
+            'discoveryDocs': ['https://people.googleapis.com/$discovery/rest'],
+            // clientId and scope are optional if auth is not required.
+            'clientId': '555055515526-d3tun71hjkfs5dj807klh243sdqb3352.apps.googleusercontent.com',
+            'scope': 'profile',
+          }).then(function() {
+            // 3. Initialize and make the API request.
+            return gapi.client.people.people.get({
+              'resourceName': 'people/me',
+              'requestMask.includeField': 'person.names'
+            });
+          }).then(function(response) {
+            console.log(response.result);
+          }, function(reason) {
+            console.log('Error: ' + reason.result.error.message);
+          });
+        };
+        // 1. Load the JavaScript client library.
+        
+        gapi.load('client', start);
+
     </script>
     
     <style>
